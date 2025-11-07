@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Calendar, Users, Clock, MapPin, Dot } from "lucide-react";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import galleryImage1 from "@/assets/figma-gallery-1.png";
 import galleryImage2 from "@/assets/figma-gallery-2.png";
 import galleryImage3 from "@/assets/figma-gallery-3.png";
@@ -123,7 +124,16 @@ const GalleryCard = ({ item, index }: { item: typeof galleryItems[0], index: num
           onMouseLeave={() => setIsHovered(false)}
         >
           {/* Премиальный индикатор кликабельности */}
-          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
+          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} md:hidden`}>
+            <span className="flex items-center gap-1">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Смотреть
+            </span>
+          </div>
+          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} hidden md:block`}>
             <span className="flex items-center gap-1">
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -146,7 +156,7 @@ const GalleryCard = ({ item, index }: { item: typeof galleryItems[0], index: num
             <div className={`absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent transition-all duration-500 ${isHovered ? 'opacity-80' : 'opacity-60'}`} />
             
             {/* Категория с премиальным оформлением */}
-            <div className={`absolute top-4 left-4 transition-all duration-300 ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-90'}`}>
+            <div className={`absolute top-2 left-2 transition-all duration-300 ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-90'}`}>
               <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm px-3 py-1.5 border border-accent/30 shadow-lg">
                 {item.category}
               </Badge>
@@ -159,6 +169,11 @@ const GalleryCard = ({ item, index }: { item: typeof galleryItems[0], index: num
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                 </svg>
               </div>
+            </div>
+            
+            {/* Мобильный индикатор касания */}
+            <div className="md:hidden absolute bottom-2 left-2 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
+              <span>Нажмите для деталей</span>
             </div>
             
             {/* Анимированные частицы при наведении */}
@@ -188,19 +203,20 @@ const GalleryCard = ({ item, index }: { item: typeof galleryItems[0], index: num
               <p className="text-sm text-muted-foreground font-sans mb-3 line-clamp-2 leading-relaxed">{item.description}</p>
             </div>
             
-            <div className="flex flex-wrap gap-2 mt-auto mb-3">
-              {item.tags.map((tag, tagIndex) => (
-                <Badge
-                  key={tagIndex}
-                  variant="outline"
-                  className={`text-xs px-2 py-1 transition-all duration-300 ${isHovered ? 'bg-accent/10 border-accent/30 text-accent' : ''}`}
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-            
-            <div className="border-t border-border/50 pt-3">
+            <div className="border-t border-border/50 pt-3 mt-auto">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex flex-wrap gap-2">
+                  {item.tags.map((tag, tagIndex) => (
+                    <Badge
+                      key={tagIndex}
+                      variant="outline"
+                      className={`text-xs px-2 py-1 transition-all duration-300 ${isHovered ? 'bg-accent/10 border-accent/30 text-accent' : ''}`}
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Стоимость проекта:</span>
                 <span className="text-lg font-bold text-accent transition-all duration-300 group-hover:scale-110">{item.price}</span>
@@ -209,7 +225,7 @@ const GalleryCard = ({ item, index }: { item: typeof galleryItems[0], index: num
           </CardContent>
         </Card>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-2 md:mx-4 bg-gradient-to-br from-background to-card/50">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-auto bg-gradient-to-br from-background to-card/50">
         <DialogHeader>
           <DialogTitle className="text-xl md:text-2xl pr-8 md:pr-0 text-gradient">{item.title}</DialogTitle>
         </DialogHeader>
@@ -297,6 +313,8 @@ export const Gallery = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
 
   useEffect(() => {
     if (!api) {
@@ -338,7 +356,10 @@ export const Gallery = () => {
   return (
     <section className="py-20 bg-gradient-to-b from-background to-card/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in relative">
+        <div
+          ref={headerRef}
+          className={`text-center mb-16 relative transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        >
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
@@ -346,12 +367,15 @@ export const Gallery = () => {
             <span className="relative z-10">Наши работы</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
-          <p className="text-xl text-muted-foreground font-sans max-w-2xl mx-auto animate-slide-in-up">
+          <p className={`text-xl text-muted-foreground font-sans max-w-2xl mx-auto transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Реализованные проекты для частных и коммерческих клиентов
           </p>
         </div>
         
-        <div className="max-w-6xl mx-auto relative">
+        <div
+          ref={contentRef}
+          className="max-w-6xl mx-auto relative"
+        >
           {/* Декоративные элементы по бокам карусели */}
           <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-r from-accent/20 to-transparent rounded-r-full blur-sm" />
           <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-l from-accent/20 to-transparent rounded-l-full blur-sm" />
@@ -363,7 +387,7 @@ export const Gallery = () => {
           >
             <CarouselContent>
               {galleryItems.map((item, index) => (
-                <CarouselItem key={item.id} className="md:basis-1/2 lg:basis-1/3 animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                <CarouselItem key={item.id} className={`md:basis-1/2 lg:basis-1/3 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${index * 100}ms` }}>
                   <GalleryCard item={item} index={index} />
                 </CarouselItem>
               ))}
@@ -405,7 +429,7 @@ export const Gallery = () => {
           </div>
         </div>
         
-        <div className="text-center mt-12 animate-fade-in-up">
+        <div className={`text-center mt-12 transition-all duration-700 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '600ms' }}>
           <p className="text-lg text-muted-foreground font-sans mb-6">
             Хотите такой же результат? Мы проконсультируем бесплатно!
           </p>
