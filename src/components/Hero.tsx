@@ -78,11 +78,14 @@ export const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 mb-6 md:mb-8">
             <Button
               size="lg"
-              className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 bg-accent hover:bg-primary transition-all duration-300 shadow-lg hover:shadow-xl premium-button shimmer-effect relative overflow-hidden group"
+              className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl premium-button shimmer-effect relative overflow-hidden group"
               onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Sparkles className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
-              Рассчитать стоимость
+              <span className="relative z-10 flex items-center">
+                <Sparkles className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
+                Рассчитать стоимость
+              </span>
+              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </Button>
             <Button
               size="lg"

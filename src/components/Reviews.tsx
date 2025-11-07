@@ -5,6 +5,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Star, Quote, Calendar, MapPin, CheckCircle, Phone, MessageCircle, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const reviews = [
   {
@@ -242,7 +243,7 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: number }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); // Индикаторы появляются только при наведении
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -252,8 +253,17 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Премиальный индикатор кликабельности */}
-          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
+          {/* Премиальный индикатор кликабельности - только при наведении */}
+          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} md:hidden`}>
+            <span className="flex items-center gap-1">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Читать отзыв
+            </span>
+          </div>
+          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} hidden md:block`}>
             <span className="flex items-center gap-1">
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -269,6 +279,8 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
           <CardContent className="p-6 flex-1 flex flex-col relative">
             {/* Декоративная линия */}
             <div className={`absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-accent to-primary transition-all duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
+            
+            {/* Удален мобильный индикатор касания */}
             
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -306,7 +318,7 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
           </CardContent>
         </Card>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-2 md:mx-4 bg-gradient-to-br from-background to-card/50">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-auto bg-gradient-to-br from-background to-card/50">
         <DialogHeader>
           <DialogTitle className="text-xl md:text-2xl pr-8 md:pr-0 text-gradient">Отзыв от {review.name}</DialogTitle>
         </DialogHeader>
@@ -478,6 +490,8 @@ export const Reviews = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
 
   useEffect(() => {
     if (!api) {
@@ -519,7 +533,10 @@ export const Reviews = () => {
   return (
     <section className="py-20 bg-gradient-to-b from-card to-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in relative">
+        <div
+          ref={headerRef}
+          className={`text-center mb-16 relative transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        >
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
@@ -527,12 +544,15 @@ export const Reviews = () => {
             <span className="relative z-10">Отзывы клиентов</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
-          <p className="text-xl text-muted-foreground font-sans max-w-2xl mx-auto animate-slide-in-up">
+          <p className={`text-xl text-muted-foreground font-sans max-w-2xl mx-auto transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Более 3000 довольных клиентов доверяют нам уже 9 лет
           </p>
         </div>
         
-        <div className="max-w-6xl mx-auto relative">
+        <div
+          ref={contentRef}
+          className="max-w-6xl mx-auto relative"
+        >
           {/* Декоративные элементы по бокам карусели */}
           <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-r from-accent/20 to-transparent rounded-r-full blur-sm" />
           <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-l from-accent/20 to-transparent rounded-l-full blur-sm" />
@@ -544,7 +564,7 @@ export const Reviews = () => {
           >
             <CarouselContent>
               {reviews.map((review, index) => (
-                <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3 animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                <CarouselItem key={review.id} className={`md:basis-1/2 lg:basis-1/3 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${index * 100}ms` }}>
                   <ReviewCard review={review} index={index} />
                 </CarouselItem>
               ))}
@@ -586,7 +606,7 @@ export const Reviews = () => {
           </div>
         </div>
         
-        <div className="text-center mt-12 animate-fade-in-up">
+        <div className={`text-center mt-12 transition-all duration-700 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '600ms' }}>
           <p className="text-lg text-muted-foreground font-sans mb-6">
             Хотите стать нашим следующим довольным клиентом?
           </p>

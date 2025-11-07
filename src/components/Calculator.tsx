@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator as CalcIcon, Phone, Mail, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const typePrices = {
   home: 1200,
@@ -46,6 +47,8 @@ export const Calculator = () => {
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
   const [showContactButtons, setShowContactButtons] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
 
   const calculatePrice = () => {
     if (!formData.type || !formData.width || !formData.height || !formData.material) {
@@ -118,7 +121,10 @@ export const Calculator = () => {
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-12 animate-fade-in relative">
+          <div
+            ref={headerRef}
+            className={`text-center mb-12 relative transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          >
             {/* Декоративный элемент заголовка */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
             
@@ -126,12 +132,16 @@ export const Calculator = () => {
               <span className="relative z-10">Калькулятор стоимости</span>
               <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
             </h2>
-            <p className="text-xl text-muted-foreground font-sans animate-slide-in-up">
+            <p className={`text-xl text-muted-foreground font-sans transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               Рассчитайте предварительную стоимость за 1 минуту
             </p>
           </div>
           
-          <Card className="border-border/50 premium-shadow animate-scale-in premium-card relative overflow-hidden">
+          <Card
+            ref={contentRef}
+            className={`border-border/50 premium-shadow premium-card relative overflow-hidden transition-all duration-700 ${contentVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+            style={{ transitionDelay: '200ms' }}
+          >
             {/* Декоративный уголок */}
             <div className="absolute top-0 right-0 w-0 h-0 border-l-[40px] border-l-transparent border-t-[40px] border-t-accent/10" />
             

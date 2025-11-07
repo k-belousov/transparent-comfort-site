@@ -80,10 +80,11 @@ export const Header = () => {
             <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
               <Button
                 onClick={() => scrollToSection("calculator")}
-                className="bg-accent hover:bg-primary transition-all duration-300 text-sm xl:text-base px-3 xl:px-6 py-2 xl:py-2.5"
+                className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-sm xl:text-base px-3 xl:px-6 py-2 xl:py-2.5 premium-button shimmer-effect relative overflow-hidden group"
               >
-                <span className="hidden sm:inline">Рассчитать</span>
-                <span className="sm:hidden">Цена</span>
+                <span className="relative z-10 hidden sm:inline">Рассчитать</span>
+                <span className="relative z-10 sm:hidden">Цена</span>
+                <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
               </Button>
               <Button
                 variant="outline"
@@ -120,37 +121,56 @@ export const Header = () => {
           </nav>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Full Screen */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-sm max-h-[70vh] overflow-y-auto">
-            <div className="container mx-auto px-4 py-4">
-              <nav className="flex flex-col space-y-2">
-                {navigation.map((item) => (
-                  <button
-                    key={item.name}
-                    onClick={() => scrollToSection(item.href)}
-                    className="text-base font-medium text-foreground hover:text-primary transition-colors text-left py-3 px-2 rounded-md hover:bg-accent/10"
-                  >
-                    {item.name}
-                  </button>
-                ))}
-                <div className="pt-4 space-y-3 border-t border-border/30 mt-4">
+          <div className="md:hidden fixed inset-0 z-[100] bg-background/98 backdrop-blur-md flex flex-col">
+            {/* Mobile Header */}
+            <div className="flex items-center justify-between p-4 border-b border-border/50 bg-background/50">
+              <img src={logo} alt="Прозрачный комфорт" className="h-8 w-auto" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            
+            {/* Mobile Navigation Content */}
+            <div className="flex-1 overflow-y-auto py-8">
+              <div className="container mx-auto px-6">
+                <nav className="flex flex-col space-y-4">
+                  {navigation.map((item, index) => (
+                    <button
+                      key={item.name}
+                      onClick={() => scrollToSection(item.href)}
+                      className="text-lg font-medium text-foreground hover:text-primary transition-all duration-300 text-left py-4 px-4 rounded-lg hover:bg-accent/10 hover:scale-[1.02] transform"
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      {item.name}
+                    </button>
+                  ))}
+                </nav>
+                
+                <div className="mt-8 space-y-4 pt-8 border-t border-border/30">
                   <Button
                     onClick={() => scrollToSection("calculator")}
-                    className="w-full bg-accent hover:bg-primary transition-all duration-300 text-base py-3"
+                    className="w-full bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-lg py-4 premium-button shimmer-effect relative overflow-hidden group"
                   >
-                    Рассчитать стоимость
+                    <span className="relative z-10">Рассчитать стоимость</span>
+                    <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full hover:bg-accent/20 transition-all duration-300 text-base py-3"
+                    className="w-full hover:bg-accent/20 transition-all duration-300 text-lg py-4"
                     onClick={() => window.open("tel:+73510000000")}
                   >
-                    <Phone className="w-4 h-4 mr-2" />
+                    <Phone className="w-5 h-5 mr-3" />
                     Позвонить
                   </Button>
                 </div>
-              </nav>
+              </div>
             </div>
           </div>
         )}

@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Globe, Clock, Hammer, Sparkles, Shield, CheckCircle } from "lucide-react";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const benefits = [
   {
@@ -35,6 +36,9 @@ const benefits = [
 ];
 
 export const Benefits = () => {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
+
   return (
     <section className="py-20 bg-gradient-to-b from-card via-card/50 to-background relative overflow-hidden">
       {/* Декоративный фон */}
@@ -45,7 +49,10 @@ export const Benefits = () => {
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16 animate-fade-in relative">
+        <div
+          ref={headerRef}
+          className={`text-center mb-16 relative transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        >
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
@@ -53,19 +60,22 @@ export const Benefits = () => {
             <span className="relative z-10">Почему нас выбирают</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
-          <p className="text-xl text-muted-foreground font-sans max-w-2xl mx-auto animate-slide-in-up">
+          <p className={`text-xl text-muted-foreground font-sans max-w-2xl mx-auto transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Качество и надёжность в каждой детали
           </p>
         </div>
         
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div
+          ref={contentRef}
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+        >
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (
               <Card
                 key={index}
-                className={`group p-4 md:p-6 hover:premium-shadow transition-all duration-500 border-border/50 animate-fade-in-up premium-card relative overflow-hidden ${index % 2 === 0 ? 'hover:scale-[1.02]' : 'hover:scale-[1.03]'}`}
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`group p-4 md:p-6 hover:premium-shadow transition-all duration-500 border-border/50 premium-card relative overflow-hidden ${index % 2 === 0 ? 'hover:scale-[1.02]' : 'hover:scale-[1.03]'} ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Декоративный уголок */}
                 <div className="absolute top-0 right-0 w-0 h-0 border-l-[30px] border-l-transparent border-t-[30px] border-t-accent/10" />
@@ -109,7 +119,7 @@ export const Benefits = () => {
         </div>
         
         {/* Дополнительный декоративный элемент */}
-        <div className="mt-16 text-center animate-fade-in-up" style={{ animationDelay: '800ms' }}>
+        <div className={`mt-16 text-center transition-all duration-700 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '800ms' }}>
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent/10 to-primary/10 rounded-full border border-accent/20">
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
             <span className="text-sm text-muted-foreground font-medium">9 лет безупречной репутации</span>

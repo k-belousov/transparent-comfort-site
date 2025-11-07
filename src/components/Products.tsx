@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import privateHomeImage from "@/assets/figma-private-home.png";
 import cafeImage from "@/assets/figma-cafe.png";
 import gazeboImage from "@/assets/figma-gazebo.png";
@@ -133,7 +134,6 @@ const ProductCard = ({ product, index }: { product: typeof products[0], index: n
             <div className="flex items-center justify-between mt-auto">
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-accent transition-all duration-300 group-hover:scale-110">{product.price}</span>
-                <span className="text-xs text-muted-foreground">от</span>
               </div>
               <Badge
                 variant="outline"
@@ -145,7 +145,7 @@ const ProductCard = ({ product, index }: { product: typeof products[0], index: n
           </CardContent>
         </Card>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-4 md:mx-auto bg-gradient-to-br from-background to-card/50">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-auto bg-gradient-to-br from-background to-card/50">
         <DialogHeader>
           <DialogTitle className="text-xl md:text-2xl pr-8 md:pr-0 text-gradient">{product.title}</DialogTitle>
         </DialogHeader>
@@ -215,6 +215,8 @@ export const Products = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
 
   useEffect(() => {
     if (!api) {
@@ -256,7 +258,10 @@ export const Products = () => {
   return (
     <section className="py-20 bg-gradient-to-b from-background to-card/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in relative">
+        <div
+          ref={headerRef}
+          className={`text-center mb-16 relative transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        >
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
@@ -264,13 +269,16 @@ export const Products = () => {
             <span className="relative z-10">Наши решения</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
-          <p className="text-xl text-muted-foreground font-sans max-w-2xl mx-auto animate-slide-in-up">
+          <p className={`text-xl text-muted-foreground font-sans max-w-2xl mx-auto transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Профессиональные мягкие окна для любых типов помещений
           </p>
         </div>
         
         {/* Все решения в одном слайдере */}
-        <div className="max-w-6xl mx-auto relative">
+        <div
+          ref={contentRef}
+          className="max-w-6xl mx-auto relative"
+        >
           {/* Декоративные элементы по бокам карусели */}
           <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-r from-accent/20 to-transparent rounded-r-full blur-sm" />
           <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-l from-accent/20 to-transparent rounded-l-full blur-sm" />
@@ -282,7 +290,7 @@ export const Products = () => {
           >
             <CarouselContent>
               {products.map((product, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                <CarouselItem key={index} className={`md:basis-1/2 lg:basis-1/3 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${index * 100}ms` }}>
                   <ProductCard product={product} index={index} />
                 </CarouselItem>
               ))}

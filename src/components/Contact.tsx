@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Phone, Mail, MapPin, MessageCircle, Clock } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import { toast } from "sonner";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const contactInfo = [
   {
@@ -38,12 +39,15 @@ const contactInfo = [
 ];
 
 export const Contact = () => {
+  const { ref: leftRef, isVisible: leftVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: rightRef, isVisible: rightVisible } = useScrollReveal({ threshold: 0.2 });
+
   const handleCallRequest = () => {
     toast.success("Спасибо! Мы перезвоним вам в течение 15 минут");
   };
 
   return (
-    <footer className="py-12 md:py-16 bg-gradient-to-b from-card via-secondary/10 to-secondary/20 relative overflow-hidden">
+    <footer className="py-10 md:py-12 bg-gradient-to-b from-card via-secondary/10 to-secondary/20 relative overflow-hidden">
       {/* Декоративные элементы фона */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-10 left-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl animate-float" />
@@ -53,7 +57,10 @@ export const Contact = () => {
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-16">
-          <div className="animate-fade-in relative">
+          <div
+            ref={leftRef}
+            className={`relative transition-all duration-700 ${leftVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          >
             {/* Декоративный уголок */}
             <div className="absolute top-0 left-0 w-0 h-0 border-r-[40px] border-r-transparent border-t-[40px] border-t-accent/10" />
             
@@ -71,19 +78,23 @@ export const Contact = () => {
               Готовы ответить на любые вопросы и помочь с выбором мягких окон для вашего объекта.
             </p>
             <Button
-              onClick={handleCallRequest}
+              onClick={() => window.open("tel:+73510000000")}
               size="lg"
               className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-base md:text-lg py-3 md:py-4 px-6 premium-button shimmer-effect relative overflow-hidden group"
             >
               <span className="relative z-10 flex items-center">
                 <Phone className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
-                Заказать звонок
+                Позвонить
               </span>
               <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </Button>
           </div>
           
-          <div className="space-y-3 md:space-y-4 animate-fade-in-up">
+          <div
+            ref={rightRef}
+            className={`space-y-3 md:space-y-4 transition-all duration-700 ${rightVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            style={{ transitionDelay: '200ms' }}
+          >
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
               return (
@@ -143,7 +154,7 @@ export const Contact = () => {
           </div>
         </div>
         
-        <div className="border-t border-border/50 pt-3 md:pt-4 text-center text-xs md:text-sm text-muted-foreground font-sans relative animate-fade-in-up">
+        <div className={`border-t border-border/50 pt-2 md:pt-3 text-center text-xs md:text-sm text-muted-foreground font-sans relative transition-all duration-700 ${rightVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '400ms' }}>
           {/* Декоративный элемент */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
           

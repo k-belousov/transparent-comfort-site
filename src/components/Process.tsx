@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Phone, Ruler, Factory, Wrench, Award } from "lucide-react";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const steps = [
   {
@@ -35,6 +36,9 @@ const steps = [
 ];
 
 export const Process = () => {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
+
   return (
     <section className="py-20 bg-gradient-to-b from-background via-card/30 to-card relative overflow-hidden">
       {/* Улучшенный фон с анимацией */}
@@ -50,7 +54,10 @@ export const Process = () => {
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16 animate-fade-in relative">
+        <div
+          ref={headerRef}
+          className={`text-center mb-16 relative transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        >
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
@@ -58,12 +65,15 @@ export const Process = () => {
             <span className="relative z-10">Как всё происходит</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
-          <p className="text-xl text-muted-foreground font-sans max-w-2xl mx-auto animate-slide-in-up">
+          <p className={`text-xl text-muted-foreground font-sans max-w-2xl mx-auto transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Простой и прозрачный процесс от заявки до установки
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 relative">
+        <div
+          ref={contentRef}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 relative"
+        >
           {/* Соединяющая линия между шагами */}
           <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent transform -translate-y-1/2 z-0" />
           
@@ -72,8 +82,8 @@ export const Process = () => {
             return (
               <Card
                 key={index}
-                className={`group relative overflow-hidden border-border/50 hover:premium-shadow transition-all duration-500 animate-fade-in-up premium-card z-10 ${index % 2 === 0 ? 'hover:scale-[1.03]' : 'hover:scale-[1.02]'}`}
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`group relative overflow-hidden border-border/50 hover:premium-shadow transition-all duration-500 premium-card z-10 ${index % 2 === 0 ? 'hover:scale-[1.03]' : 'hover:scale-[1.02]'} ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Декоративный уголок */}
                 <div className="absolute top-0 right-0 w-0 h-0 border-l-[25px] border-l-transparent border-t-[25px] border-t-accent/10" />
@@ -120,7 +130,7 @@ export const Process = () => {
         </div>
         
         {/* Дополнительный декоративный элемент */}
-        <div className="mt-16 text-center animate-fade-in-up" style={{ animationDelay: '1000ms' }}>
+        <div className={`mt-16 text-center transition-all duration-700 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '1000ms' }}>
           <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-accent/10 to-primary/10 rounded-full border border-accent/20 hover:border-accent/40 transition-all duration-300 hover:scale-105">
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
             <span className="text-sm text-muted-foreground font-medium">Весь процесс занимает от 3 до 7 дней</span>
