@@ -52,7 +52,31 @@ export const Calculator = () => {
 
   const calculatePrice = () => {
     if (!formData.type || !formData.width || !formData.height || !formData.material) {
-      toast.error("Пожалуйста, заполните тип, размеры и материал для расчета");
+      toast.error("Пожалуйста, заполните все обязательные поля");
+      return;
+    }
+    
+    const width = parseFloat(formData.width);
+    const height = parseFloat(formData.height);
+    
+    // Валидация значений
+    if (isNaN(width) || isNaN(height)) {
+      toast.error("Пожалуйста, введите корректные числовые значения");
+      return;
+    }
+    
+    if (width <= 0 || height <= 0) {
+      toast.error("Размеры должны быть положительными числами");
+      return;
+    }
+    
+    if (width > 100 || height > 100) {
+      toast.error("Слишком большие размеры. Максимальный размер: 100м");
+      return;
+    }
+    
+    if (width < 0.5 || height < 0.5) {
+      toast.error("Минимальный размер: 0.5м");
       return;
     }
     
@@ -60,8 +84,6 @@ export const Calculator = () => {
     
     // Имитация расчета для визуального эффекта
     setTimeout(() => {
-      const width = parseFloat(formData.width);
-      const height = parseFloat(formData.height);
       const area = width * height;
       const basePrice = typePrices[formData.type as keyof typeof typePrices] || 8000;
       const materialMultiplier = materialPrices[formData.material as keyof typeof materialPrices] || 1.0;
@@ -96,6 +118,14 @@ export const Calculator = () => {
     
     if (!formData.type || !formData.width || !formData.height || !formData.material) {
       toast.error("Пожалуйста, заполните все обязательные поля");
+      return;
+    }
+    
+    const width = parseFloat(formData.width);
+    const height = parseFloat(formData.height);
+    
+    if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+      toast.error("Пожалуйста, введите корректные размеры");
       return;
     }
     
@@ -179,14 +209,31 @@ export const Calculator = () => {
                       id="width"
                       type="number"
                       step="0.1"
+                      min="0.5"
+                      max="100"
                       placeholder="Например: 3.5"
                       value={formData.width}
                       onChange={(e) => {
-                        setFormData({ ...formData, width: e.target.value });
-                        resetCalculator();
+                        const value = e.target.value;
+                        // Разрешаем только цифры, точку и пустую строку
+                        if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                          setFormData({ ...formData, width: value });
+                          resetCalculator();
+                        }
+                      }}
+                      onInvalid={(e) => {
+                        e.currentTarget.setCustomValidity("Пожалуйста, введите число от 0.5 до 100");
+                      }}
+                      onInput={(e) => {
+                        e.currentTarget.setCustomValidity("");
                       }}
                       className="hover:border-accent/50 transition-colors"
+                      aria-describedby="width-help"
+                      required
                     />
+                    <p id="width-help" className="text-xs text-muted-foreground mt-1">
+                      Минимум: 0.5м, Максимум: 100м
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="height" className="flex items-center gap-2">
@@ -197,14 +244,31 @@ export const Calculator = () => {
                       id="height"
                       type="number"
                       step="0.1"
+                      min="0.5"
+                      max="100"
                       placeholder="Например: 2.5"
                       value={formData.height}
                       onChange={(e) => {
-                        setFormData({ ...formData, height: e.target.value });
-                        resetCalculator();
+                        const value = e.target.value;
+                        // Разрешаем только цифры, точку и пустую строку
+                        if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                          setFormData({ ...formData, height: value });
+                          resetCalculator();
+                        }
+                      }}
+                      onInvalid={(e) => {
+                        e.currentTarget.setCustomValidity("Пожалуйста, введите число от 0.5 до 100");
+                      }}
+                      onInput={(e) => {
+                        e.currentTarget.setCustomValidity("");
                       }}
                       className="hover:border-accent/50 transition-colors"
+                      aria-describedby="height-help"
+                      required
                     />
+                    <p id="height-help" className="text-xs text-muted-foreground mt-1">
+                      Минимум: 0.5м, Максимум: 100м
+                    </p>
                   </div>
                 </div>
                 

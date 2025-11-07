@@ -47,7 +47,7 @@ export const Contact = () => {
   };
 
   return (
-    <footer className="py-10 md:py-12 bg-gradient-to-b from-card via-secondary/10 to-secondary/20 relative overflow-hidden">
+    <footer className="py-10 md:py-12 bg-gradient-to-b from-card via-secondary/10 to-secondary/20 relative overflow-hidden" role="contentinfo">
       {/* Декоративные элементы фона */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-10 left-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl animate-float" />
@@ -81,6 +81,7 @@ export const Contact = () => {
               onClick={() => window.open("tel:+73510000000")}
               size="lg"
               className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-base md:text-lg py-3 md:py-4 px-6 premium-button shimmer-effect relative overflow-hidden group"
+              aria-label="Позвонить в компанию Прозрачный комфорт"
             >
               <span className="relative z-10 flex items-center">
                 <Phone className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
@@ -136,11 +137,12 @@ export const Contact = () => {
                             className="text-sm md:text-base text-foreground font-medium hover:text-primary transition-colors truncate block group-hover:text-accent"
                             target={info.action.startsWith('http') ? "_blank" : undefined}
                             rel={info.action.startsWith('http') ? "noopener noreferrer" : undefined}
+                            aria-label={`${info.label}: ${info.value}`}
                           >
                             {info.value}
                           </a>
                         ) : (
-                          <p className="text-sm md:text-base text-foreground font-medium truncate group-hover:text-accent transition-colors duration-300">{info.value}</p>
+                          <p className="text-sm md:text-base text-foreground font-medium truncate group-hover:text-accent transition-colors duration-300" aria-label={`${info.label}: ${info.value}`}>{info.value}</p>
                         )}
                       </div>
                     </div>

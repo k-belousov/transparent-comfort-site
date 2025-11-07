@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Страница не найдена | Прозрачный комфорт</title>
+  <meta name="description" content="Страница не найдена. Перенаправление на главную страницу сайта Прозрачный комфорт.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: linear-gradient(135deg, #f8f7f4 0%, #f0ede6 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a4a4a;
+    }
+    
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 2rem;
+    }
+    
+    .error-code {
+      font-size: 8rem;
+      font-weight: 700;
+      color: #8b7355;
+      margin: 0;
+      line-height: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .error-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 1rem 0;
+      color: #3d3228;
+    }
+    
+    .error-description {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .home-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #d4a574 0%, #8b7355 100%);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(139, 115, 85, 0.3);
+    }
+    
+    .home-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(139, 115, 85, 0.4);
+    }
+    
+    .loading {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #8b7355;
+      opacity: 0.8;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #8b7355;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 6rem;
+      }
+      
+      .error-title {
+        font-size: 1.5rem;
+      }
+      
+      .error-description {
+        font-size: 1rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+  <script>
+    // Сохраняем текущий URL для редиректа
+    sessionStorage.redirect = location.pathname + location.search + location.hash;
+    
+    // Автоматический редирект через 5 секунд
+    setTimeout(function() {
+      window.location.replace('/transparent-comfort-site/');
+    }, 5000);
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title">Страница не найдена</h2>
+    <p class="error-description">
+      К сожалению, запрашиваемая страница не существует. 
+      Возможно, она была перемещена или удалена. 
+      Мы перенаправим вас на главную страницу через несколько секунд.
+    </p>
+    <a href="/transparent-comfort-site/" class="home-button">
+      Перейти на главную
+    </a>
+    <p class="loading">
+      <span class="spinner"></span>
+      Автоматическое перенаправление через 5 секунд...
+    </p>
+  </div>
+</body>
+</html>

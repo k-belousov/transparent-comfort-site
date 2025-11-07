@@ -55,21 +55,23 @@ export const Header = () => {
         className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50 transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
+        role="banner"
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <img src={logo} alt="Прозрачный комфорт" className="h-8 w-auto sm:h-10" />
+              <img src={logo} alt="Прозрачный комфорт - мягкие окна премиум-класса" className="h-8 w-auto sm:h-10" />
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8">
+            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8" role="navigation" aria-label="Основная навигация">
               {navigation.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
                   className="text-sm xl:text-base font-medium text-foreground hover:text-primary transition-colors py-2 px-1"
+                  aria-label={`Перейти к разделу ${item.name}`}
                 >
                   {item.name}
                 </button>
@@ -102,18 +104,22 @@ export const Header = () => {
               size="icon"
               className="md:hidden h-10 w-10"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Закрыть меню" : "Открыть меню"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
           </div>
 
           {/* Tablet Navigation */}
-          <nav className="hidden md:flex lg:hidden items-center justify-center space-x-3 py-2 border-t border-border/50">
+          <nav className="hidden md:flex lg:hidden items-center justify-center space-x-3 py-2 border-t border-border/50" role="navigation" aria-label="Навигация для планшетов">
             {navigation.slice(0, 5).map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
                 className="text-xs font-medium text-foreground hover:text-primary transition-colors"
+                aria-label={`Перейти к разделу ${item.name}`}
               >
                 {item.name}
               </button>
@@ -123,15 +129,16 @@ export const Header = () => {
 
         {/* Mobile Navigation - Full Screen */}
         {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-[100] bg-background/98 backdrop-blur-md flex flex-col">
+          <div id="mobile-menu" className="md:hidden fixed inset-0 z-[100] bg-background/98 backdrop-blur-md flex flex-col" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
             {/* Mobile Header */}
             <div className="flex items-center justify-between p-4 border-b border-border/50 bg-background/50">
-              <img src={logo} alt="Прозрачный комфорт" className="h-8 w-auto" />
+              <img src={logo} alt="Прозрачный комфорт - мягкие окна премиум-класса" className="h-8 w-auto" />
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-10 w-10"
                 onClick={() => setIsMenuOpen(false)}
+                aria-label="Закрыть меню"
               >
                 <X className="w-5 h-5" />
               </Button>
@@ -140,13 +147,15 @@ export const Header = () => {
             {/* Mobile Navigation Content */}
             <div className="flex-1 overflow-y-auto py-8">
               <div className="container mx-auto px-6">
-                <nav className="flex flex-col space-y-4">
+                <h2 id="mobile-menu-title" className="sr-only">Мобильное меню навигации</h2>
+                <nav className="flex flex-col space-y-4" role="navigation" aria-label="Мобильная навигация">
                   {navigation.map((item, index) => (
                     <button
                       key={item.name}
                       onClick={() => scrollToSection(item.href)}
                       className="text-lg font-medium text-foreground hover:text-primary transition-all duration-300 text-left py-4 px-4 rounded-lg hover:bg-accent/10 hover:scale-[1.02] transform"
                       style={{ animationDelay: `${index * 50}ms` }}
+                      aria-label={`Перейти к разделу ${item.name}`}
                     >
                       {item.name}
                     </button>
@@ -182,6 +191,8 @@ export const Header = () => {
           onClick={scrollToTop}
           size="icon"
           className="fixed bottom-6 right-6 z-40 bg-accent hover:bg-primary transition-all duration-300 shadow-lg hover:shadow-xl h-12 w-12 rounded-full"
+          aria-label="Наверх страницы"
+          title="Вернуться наверх"
         >
           <ChevronUp className="w-5 h-5" />
         </Button>

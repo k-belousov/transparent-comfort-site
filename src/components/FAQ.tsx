@@ -34,11 +34,11 @@ const faqs = [
 
 export const FAQ = () => {
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-background" aria-labelledby="faq-title">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 id="faq-title" className="text-4xl md:text-5xl font-bold mb-4">
               Частые вопросы
             </h2>
             <p className="text-xl text-muted-foreground font-sans">
@@ -46,17 +46,26 @@ export const FAQ = () => {
             </p>
           </div>
           
-          <Accordion type="single" collapsible className="animate-fade-in-up">
+          <Accordion type="single" collapsible className="animate-fade-in-up" role="region" aria-label="Часто задаваемые вопросы">
             {faqs.map((faq, index) => (
-              <AccordionItem 
-                key={index} 
+              <AccordionItem
+                key={index}
                 value={`item-${index}`}
                 className="border-border/50"
               >
-                <AccordionTrigger className="text-left text-lg font-semibold hover:text-primary transition-colors">
+                <AccordionTrigger
+                  className="text-left text-lg font-semibold hover:text-primary transition-colors"
+                  aria-controls={`faq-answer-${index}`}
+                  aria-expanded="false"
+                >
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground font-sans leading-relaxed">
+                <AccordionContent
+                  id={`faq-answer-${index}`}
+                  className="text-muted-foreground font-sans leading-relaxed"
+                  role="region"
+                  aria-labelledby={`faq-question-${index}`}
+                >
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

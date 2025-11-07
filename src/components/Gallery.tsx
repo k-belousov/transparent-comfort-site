@@ -354,7 +354,7 @@ export const Gallery = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-card/30">
+    <section className="py-20 bg-gradient-to-b from-background to-card/30" aria-labelledby="gallery-title">
       <div className="container mx-auto px-4">
         <div
           ref={headerRef}
@@ -363,7 +363,7 @@ export const Gallery = () => {
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 relative">
+          <h2 id="gallery-title" className="text-4xl md:text-5xl font-bold mb-4 relative">
             <span className="relative z-10">Наши работы</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
@@ -384,6 +384,9 @@ export const Gallery = () => {
             className="w-full"
             opts={{ loop: true }}
             setApi={setApi}
+            role="region"
+            aria-roledescription="Карусель проектов"
+            aria-label="Галерея реализованных проектов"
           >
             <CarouselContent>
               {galleryItems.map((item, index) => (
@@ -392,12 +395,12 @@ export const Gallery = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
-            <CarouselNext className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
+            <CarouselPrevious className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Предыдущий проект" />
+            <CarouselNext className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Следующий проект" />
           </Carousel>
           
           {/* Индикаторы для мобильной версии */}
-          <div className="flex justify-center mt-4 gap-1 md:hidden">
+          <div className="flex justify-center mt-4 gap-1 md:hidden" role="tablist" aria-label="Навигация по проектам">
             {Array.from({ length: count }).map((_, index) => (
               <button
                 key={index}
@@ -407,13 +410,16 @@ export const Gallery = () => {
                     ? "w-8 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30"
                     : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50"
                 }`}
-                aria-label={`Перейти к слайду ${index + 1}`}
+                role="tab"
+                aria-selected={index === current - 1}
+                aria-controls={`gallery-slide-${index}`}
+                aria-label={`Перейти к проекту ${index + 1}`}
               />
             ))}
           </div>
           
           {/* Индикаторы для десктопной версии */}
-          <div className="hidden md:flex justify-center mt-6 gap-1 flex-wrap max-w-lg mx-auto">
+          <div className="hidden md:flex justify-center mt-6 gap-1 flex-wrap max-w-lg mx-auto" role="tablist" aria-label="Навигация по проектам">
             {Array.from({ length: count }).map((_, index) => (
               <button
                 key={index}
@@ -423,7 +429,10 @@ export const Gallery = () => {
                     ? "w-6 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30 scale-110"
                     : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 hover:scale-125"
                 }`}
-                aria-label={`Перейти к слайду ${index + 1}`}
+                role="tab"
+                aria-selected={index === current - 1}
+                aria-controls={`gallery-slide-${index}`}
+                aria-label={`Перейти к проекту ${index + 1}`}
               />
             ))}
           </div>
@@ -436,6 +445,7 @@ export const Gallery = () => {
           <button
             onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
             className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent text-white font-medium px-8 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl premium-button shimmer-effect relative overflow-hidden group"
+            aria-label="Рассчитать стоимость вашего проекта"
           >
             <span className="relative z-10">Рассчитать стоимость проекта</span>
             <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />

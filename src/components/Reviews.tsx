@@ -531,7 +531,7 @@ export const Reviews = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-card to-background">
+    <section className="py-20 bg-gradient-to-b from-card to-background" aria-labelledby="reviews-title">
       <div className="container mx-auto px-4">
         <div
           ref={headerRef}
@@ -540,7 +540,7 @@ export const Reviews = () => {
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 relative">
+          <h2 id="reviews-title" className="text-4xl md:text-5xl font-bold mb-4 relative">
             <span className="relative z-10">Отзывы клиентов</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
@@ -561,6 +561,9 @@ export const Reviews = () => {
             className="w-full"
             opts={{ loop: true }}
             setApi={setApi}
+            role="region"
+            aria-roledescription="Карусель отзывов"
+            aria-label="Отзывы клиентов о наших работах"
           >
             <CarouselContent>
               {reviews.map((review, index) => (
@@ -569,12 +572,12 @@ export const Reviews = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
-            <CarouselNext className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
+            <CarouselPrevious className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Предыдущий отзыв" />
+            <CarouselNext className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Следующий отзыв" />
           </Carousel>
           
           {/* Индикаторы для мобильной версии */}
-          <div className="flex justify-center mt-4 gap-1 md:hidden">
+          <div className="flex justify-center mt-4 gap-1 md:hidden" role="tablist" aria-label="Навигация по отзывам">
             {Array.from({ length: Math.min(count, 6) }).map((_, index) => (
               <button
                 key={index}
@@ -584,13 +587,16 @@ export const Reviews = () => {
                     ? "w-8 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30"
                     : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50"
                 }`}
-                aria-label={`Перейти к слайду ${index + 1}`}
+                role="tab"
+                aria-selected={index === current - 1}
+                aria-controls={`review-slide-${index}`}
+                aria-label={`Перейти к отзыву ${index + 1}`}
               />
             ))}
           </div>
           
           {/* Индикаторы для десктопной версии */}
-          <div className="hidden md:flex justify-center mt-6 gap-1 flex-wrap max-w-lg mx-auto">
+          <div className="hidden md:flex justify-center mt-6 gap-1 flex-wrap max-w-lg mx-auto" role="tablist" aria-label="Навигация по отзывам">
             {Array.from({ length: count }).map((_, index) => (
               <button
                 key={index}
@@ -600,7 +606,10 @@ export const Reviews = () => {
                     ? "w-6 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30 scale-110"
                     : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 hover:scale-125"
                 }`}
-                aria-label={`Перейти к слайду ${index + 1}`}
+                role="tab"
+                aria-selected={index === current - 1}
+                aria-controls={`review-slide-${index}`}
+                aria-label={`Перейти к отзыву ${index + 1}`}
               />
             ))}
           </div>
