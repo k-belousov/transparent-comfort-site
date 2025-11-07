@@ -122,28 +122,28 @@ export const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-sm">
+          <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-sm max-h-[70vh] overflow-y-auto">
             <div className="container mx-auto px-4 py-4">
-              <nav className="flex flex-col space-y-3">
+              <nav className="flex flex-col space-y-2">
                 {navigation.map((item) => (
                   <button
                     key={item.name}
                     onClick={() => scrollToSection(item.href)}
-                    className="text-base font-medium text-foreground hover:text-primary transition-colors text-left py-3 border-b border-border/30"
+                    className="text-base font-medium text-foreground hover:text-primary transition-colors text-left py-3 px-2 rounded-md hover:bg-accent/10"
                   >
                     {item.name}
                   </button>
                 ))}
-                <div className="pt-4 space-y-3">
+                <div className="pt-4 space-y-3 border-t border-border/30 mt-4">
                   <Button
                     onClick={() => scrollToSection("calculator")}
-                    className="w-full bg-accent hover:bg-primary transition-all duration-300 text-lg py-3"
+                    className="w-full bg-accent hover:bg-primary transition-all duration-300 text-base py-3"
                   >
                     Рассчитать стоимость
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full hover:bg-accent/20 transition-all duration-300 text-lg py-3"
+                    className="w-full hover:bg-accent/20 transition-all duration-300 text-base py-3"
                     onClick={() => window.open("tel:+73510000000")}
                   >
                     <Phone className="w-4 h-4 mr-2" />

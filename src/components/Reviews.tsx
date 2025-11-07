@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Star, Quote, Calendar, MapPin, CheckCircle } from "lucide-react";
+import { Star, Quote, Calendar, MapPin, CheckCircle, Phone, MessageCircle, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const reviews = [
   {
@@ -241,23 +242,45 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: number }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Card className="group cursor-pointer hover:shadow-elevated transition-all duration-300 border-border/50 h-full flex flex-col">
-          <CardContent className="p-6 flex-1 flex flex-col">
+        <Card
+          className={`group cursor-pointer hover:premium-shadow transition-all duration-500 border-border/50 h-full flex flex-col relative premium-card ${isHovered ? 'scale-[1.02]' : ''}`}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Премиальный индикатор кликабельности */}
+          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
+            <span className="flex items-center gap-1">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Читать отзыв
+            </span>
+          </div>
+          
+          {/* Декоративный уголок */}
+          <div className="absolute top-0 left-0 w-0 h-0 border-t-[40px] border-t-accent/20 border-r-[40px] border-r-transparent" />
+          
+          <CardContent className="p-6 flex-1 flex flex-col relative">
+            {/* Декоративная линия */}
+            <div className={`absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-accent to-primary transition-all duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
+            
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center text-accent font-bold transition-all duration-300 ${isHovered ? 'scale-110 shadow-lg shadow-accent/30' : ''}`}>
                   {review.avatar}
                 </div>
                 <div>
-                  <h3 className="font-bold">{review.name}</h3>
+                  <h3 className="font-bold transition-colors duration-300 group-hover:text-accent">{review.name}</h3>
                   <p className="text-sm text-muted-foreground">{review.project}</p>
                 </div>
               </div>
-              <Quote className="w-5 h-5 text-primary/20" />
+              <Quote className={`w-5 h-5 text-primary/20 transition-all duration-300 ${isHovered ? 'text-accent/40 scale-110' : ''}`} />
             </div>
             
             <div className="flex items-center gap-2 mb-3">
@@ -265,13 +288,17 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
               <span className="text-sm text-muted-foreground">{review.date}</span>
             </div>
             
-            <p className="text-muted-foreground font-sans mb-4 leading-relaxed line-clamp-3 flex-1">
+            <p className="text-muted-foreground font-sans mb-4 leading-relaxed line-clamp-3 flex-1 transition-colors duration-300 group-hover:text-foreground">
               "{review.text}"
             </p>
             
             <div className="flex flex-wrap gap-2 mt-auto">
               {review.tags.map((tag, tagIndex) => (
-                <Badge key={tagIndex} variant="outline" className="text-xs">
+                <Badge
+                  key={tagIndex}
+                  variant="outline"
+                  className={`text-xs px-2 py-1 transition-all duration-300 ${isHovered ? 'bg-accent/10 border-accent/30 text-accent' : ''}`}
+                >
                   {tag}
                 </Badge>
               ))}
@@ -279,19 +306,19 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
           </CardContent>
         </Card>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-2 md:mx-4 bg-gradient-to-br from-background to-card/50">
         <DialogHeader>
-          <DialogTitle>Отзыв от {review.name}</DialogTitle>
+          <DialogTitle className="text-xl md:text-2xl pr-8 md:pr-0 text-gradient">Отзыв от {review.name}</DialogTitle>
         </DialogHeader>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-2xl">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div className="space-y-4 md:space-y-6">
+            <div className="flex items-center gap-4 animate-slide-in-left">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center text-accent font-bold text-lg md:text-2xl shadow-lg">
                 {review.avatar}
               </div>
               <div>
-                <h3 className="text-xl font-bold">{review.name}</h3>
-                <p className="text-muted-foreground">{review.project}</p>
+                <h3 className="text-lg md:text-xl font-bold">{review.name}</h3>
+                <p className="text-muted-foreground text-sm md:text-base">{review.project}</p>
                 <div className="flex items-center gap-2 mt-2">
                   <StarRating rating={review.rating} />
                   <span className="text-sm text-muted-foreground">{review.date}</span>
@@ -299,54 +326,74 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
               </div>
             </div>
             
-            <div>
-              <h4 className="font-bold mb-3">Отзыв</h4>
-              <p className="text-muted-foreground font-sans leading-relaxed italic">
-                "{review.text}"
-              </p>
+            <div className="animate-slide-in-left" style={{ animationDelay: '0.1s' }}>
+              <h4 className="font-bold mb-3 text-lg flex items-center gap-2">
+                <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+                Отзыв
+              </h4>
+              <div className="bg-card/30 rounded-lg p-4 border border-border/30">
+                <p className="text-muted-foreground font-sans leading-relaxed italic text-sm md:text-base">
+                  "{review.text}"
+                </p>
+              </div>
             </div>
           </div>
           
-          <div className="space-y-6">
-            <div>
-              <h4 className="font-bold mb-3">Информация о проекте</h4>
-              <div className="bg-card/50 rounded-lg p-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <MapPin className="w-4 h-4 text-muted-foreground" />
+          <div className="space-y-4 md:space-y-6">
+            <div className="animate-slide-in-left" style={{ animationDelay: '0.2s' }}>
+              <h4 className="font-bold mb-3 text-lg flex items-center gap-2">
+                <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+                Информация о проекте
+              </h4>
+              <div className="bg-card/50 rounded-lg p-4 space-y-3 border border-border/30 hover:border-accent/30 transition-colors">
+                <div className="flex items-center gap-3 text-sm p-2 rounded-lg bg-card/30 hover:bg-card/50 transition-colors">
+                  <div className="p-1.5 rounded-full bg-accent/20">
+                    <MapPin className="w-4 h-4 text-accent" />
+                  </div>
                   <span className="text-muted-foreground">{review.location}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                <div className="flex items-center gap-3 text-sm p-2 rounded-lg bg-card/30 hover:bg-card/50 transition-colors">
+                  <div className="p-1.5 rounded-full bg-accent/20">
+                    <Calendar className="w-4 h-4 text-accent" />
+                  </div>
                   <span className="text-muted-foreground">Срок выполнения: {review.duration}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-muted-foreground" />
+                <div className="flex items-center gap-3 text-sm p-2 rounded-lg bg-card/30 hover:bg-card/50 transition-colors">
+                  <div className="p-1.5 rounded-full bg-accent/20">
+                    <CheckCircle className="w-4 h-4 text-accent" />
+                  </div>
                   <span className="text-muted-foreground">{review.details.service}</span>
                 </div>
               </div>
             </div>
             
-            <div>
-              <h4 className="font-bold mb-3">Технические детали</h4>
-              <div className="bg-card/50 rounded-lg p-4">
+            <div className="animate-slide-in-left" style={{ animationDelay: '0.3s' }}>
+              <h4 className="font-bold mb-3 text-lg flex items-center gap-2">
+                <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+                Технические детали
+              </h4>
+              <div className="bg-card/50 rounded-lg p-4 border border-border/30 hover:border-accent/30 transition-colors">
                 <p className="text-sm mb-3"><strong>Материалы:</strong> {review.details.materials}</p>
                 <div className="space-y-2">
                   <p className="text-sm"><strong>Особенности:</strong></p>
-                  <ul className="space-y-1 ml-4">
+                  <ul className="space-y-2 ml-4">
                     {review.details.features.map((feature, idx) => (
-                      <li key={idx} className="text-sm text-muted-foreground">• {feature}</li>
+                      <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2 group/item">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0 group-hover/item:scale-150 transition-transform duration-300" />
+                        <span className="group-hover/item:text-foreground transition-colors duration-300">{feature}</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center justify-between pt-4 border-t">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-border/50 animate-slide-in-left" style={{ animationDelay: '0.4s' }}>
               <div>
                 <p className="text-sm text-muted-foreground">Стоимость проекта</p>
-                <p className="text-2xl font-bold text-accent">{review.price}</p>
+                <p className="text-xl md:text-2xl font-bold text-accent transition-all duration-300 hover:scale-105">{review.price}</p>
               </div>
-              <Badge variant="secondary" className="text-sm">
+              <Badge variant="secondary" className="text-sm w-fit px-3 py-1.5 bg-accent/10 border-accent/30 text-accent">
                 {review.tags[0]}
               </Badge>
             </div>
@@ -357,43 +404,193 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
   );
 };
 
-export const Reviews = () => {
+const ConsultationDialog = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleContact = (method: 'phone' | 'whatsapp' | 'email') => {
+    const message = "Здравствуйте! Я хотел(а) бы получить бесплатную консультацию по мягким окнам.";
+    
+    switch (method) {
+      case 'phone':
+        window.open('tel:+73510000000');
+        break;
+      case 'whatsapp':
+        window.open(`https://wa.me/73510000000?text=${encodeURIComponent(message)}`);
+        break;
+      case 'email':
+        window.open(`mailto:info@prozrachnycomfort.ru?subject=Запрос на консультацию&body=${encodeURIComponent(message)}`);
+        break;
+    }
+  };
+
   return (
-    <section className="py-20 bg-card">
+    <div className="text-center">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent text-white font-medium px-8 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl premium-button shimmer-effect relative overflow-hidden group"
+      >
+        <span className="relative z-10">Получить бесплатную консультацию</span>
+        <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+      </button>
+      
+      {/* Раскрывающийся скрытый блок с премиальными эффектами */}
+      <div className={`mt-4 overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="bg-gradient-to-br from-card to-background border border-border/50 rounded-lg p-4 shadow-lg max-w-md mx-auto animate-scale-in">
+          <h3 className="text-lg font-bold mb-4 flex items-center justify-center gap-2">
+            <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+            Выберите удобный способ связи
+          </h3>
+          <div className="space-y-3">
+            <Button
+              onClick={() => handleContact('phone')}
+              className="w-full bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl premium-button"
+            >
+              <Phone className="w-4 h-4 mr-2" />
+              Позвонить
+            </Button>
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                variant="outline"
+                onClick={() => handleContact('whatsapp')}
+                className="hover:bg-accent/20 transition-all duration-300 hover:scale-105 premium-button"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                WhatsApp
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleContact('email')}
+                className="hover:bg-accent/20 transition-all duration-300 hover:scale-105 premium-button"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Email
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const Reviews = () => {
+  const [api, setApi] = useState<CarouselApi | null>(null);
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+
+    // Автоскроллинг каждые 5 секунд
+    intervalRef.current = setInterval(() => {
+      api.scrollNext();
+    }, 5000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [api]);
+
+  const handleDotClick = (index: number) => {
+    if (api) {
+      api.scrollTo(index);
+      // Сбрасываем таймер при ручном переключении
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      intervalRef.current = setInterval(() => {
+        api.scrollNext();
+      }, 5000);
+    }
+  };
+
+  return (
+    <section className="py-20 bg-gradient-to-b from-card to-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Отзывы клиентов
+        <div className="text-center mb-16 animate-fade-in relative">
+          {/* Декоративный элемент заголовка */}
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
+          
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 relative">
+            <span className="relative z-10">Отзывы клиентов</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
-          <p className="text-xl text-muted-foreground font-sans max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground font-sans max-w-2xl mx-auto animate-slide-in-up">
             Более 3000 довольных клиентов доверяют нам уже 9 лет
           </p>
         </div>
         
-        <div className="max-w-6xl mx-auto">
-          <Carousel className="w-full" opts={{ loop: true }}>
+        <div className="max-w-6xl mx-auto relative">
+          {/* Декоративные элементы по бокам карусели */}
+          <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-r from-accent/20 to-transparent rounded-r-full blur-sm" />
+          <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-l from-accent/20 to-transparent rounded-l-full blur-sm" />
+          
+          <Carousel
+            className="w-full"
+            opts={{ loop: true }}
+            setApi={setApi}
+          >
             <CarouselContent>
               {reviews.map((review, index) => (
-                <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3 animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                   <ReviewCard review={review} index={index} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
+            <CarouselNext className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
           </Carousel>
+          
+          {/* Индикаторы для мобильной версии */}
+          <div className="flex justify-center mt-4 gap-1 md:hidden">
+            {Array.from({ length: Math.min(count, 6) }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleDotClick(index)}
+                className={`transition-all duration-300 ${
+                  index === current - 1
+                    ? "w-8 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30"
+                    : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50"
+                }`}
+                aria-label={`Перейти к слайду ${index + 1}`}
+              />
+            ))}
+          </div>
+          
+          {/* Индикаторы для десктопной версии */}
+          <div className="hidden md:flex justify-center mt-6 gap-1 flex-wrap max-w-lg mx-auto">
+            {Array.from({ length: count }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleDotClick(index)}
+                className={`transition-all duration-300 ${
+                  index === current - 1
+                    ? "w-6 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30 scale-110"
+                    : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 hover:scale-125"
+                }`}
+                aria-label={`Перейти к слайду ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
         
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 animate-fade-in-up">
           <p className="text-lg text-muted-foreground font-sans mb-6">
             Хотите стать нашим следующим довольным клиентом?
           </p>
-          <button
-            onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-accent hover:bg-primary text-white font-medium px-8 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            Получить бесплатную консультацию
-          </button>
+          <ConsultationDialog />
         </div>
       </div>
     </section>

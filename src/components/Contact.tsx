@@ -43,54 +43,99 @@ export const Contact = () => {
   };
 
   return (
-    <footer className="py-20 bg-gradient-to-b from-card to-secondary/20">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div className="animate-fade-in">
-            <img src={logo} alt="Прозрачный комфорт" className="h-16 w-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Свяжитесь с нами</h2>
-            <p className="text-lg text-muted-foreground font-sans mb-6 leading-relaxed">
+    <footer className="py-12 md:py-16 bg-gradient-to-b from-card via-secondary/10 to-secondary/20 relative overflow-hidden">
+      {/* Декоративные элементы фона */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-accent/20 rounded-full blur-2xl animate-float" style={{ animationDelay: '2s' }} />
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-16">
+          <div className="animate-fade-in relative">
+            {/* Декоративный уголок */}
+            <div className="absolute top-0 left-0 w-0 h-0 border-r-[40px] border-r-transparent border-t-[40px] border-t-accent/10" />
+            
+            <div className="relative inline-block mb-4 md:mb-6">
+              <img src={logo} alt="Прозрачный комфорт" className="h-12 md:h-16 w-auto relative z-10" />
+              {/* Свечение вокруг логотипа */}
+              <div className="absolute inset-0 bg-accent/20 blur-xl scale-150 animate-pulse-glow" />
+            </div>
+            
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 relative">
+              <span className="relative z-10">Свяжитесь с нами</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground font-sans mb-4 md:mb-6 leading-relaxed animate-slide-in-up">
               Готовы ответить на любые вопросы и помочь с выбором мягких окон для вашего объекта.
             </p>
-            <Button 
+            <Button
               onClick={handleCallRequest}
               size="lg"
-              className="bg-accent hover:bg-primary transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-base md:text-lg py-3 md:py-4 px-6 premium-button shimmer-effect relative overflow-hidden group"
             >
-              <Phone className="w-5 h-5 mr-2" />
-              Заказать звонок
+              <span className="relative z-10 flex items-center">
+                <Phone className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
+                Заказать звонок
+              </span>
+              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </Button>
           </div>
           
-          <div className="space-y-4 animate-fade-in-up">
+          <div className="space-y-3 md:space-y-4 animate-fade-in-up">
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
               return (
-                <Card 
+                <Card
                   key={index}
-                  className="border-border/50 hover:shadow-lg transition-all duration-300"
+                  className="border-border/50 hover:premium-shadow transition-all duration-500 premium-card relative overflow-hidden group"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-lg bg-accent/20">
-                        <Icon className="w-5 h-5 text-primary" />
+                  {/* Декоративный уголок */}
+                  <div className="absolute top-0 right-0 w-0 h-0 border-l-[30px] border-l-transparent border-t-[30px] border-t-accent/10" />
+                  
+                  {/* Анимированные частицы при наведении */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                    {[...Array(2)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-1 h-1 bg-accent/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          left: `${20 + i * 60}%`,
+                          top: `${40 + i * 20}%`,
+                          transitionDelay: `${i * 100}ms`
+                        }}
+                      />
+                    ))}
+                  </div>
+                  
+                  <CardContent className="p-3 md:p-4 relative">
+                    <div className="flex items-center gap-3 md:gap-4">
+                      <div className={`p-2 md:p-3 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-300 relative ${index % 2 === 0 ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'}`}>
+                        <Icon className="w-4 h-4 md:w-5 md:h-5 text-primary relative z-10" />
+                        {/* Свечение вокруг иконки */}
+                        <div className="absolute inset-0 bg-accent/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm text-muted-foreground font-sans">{info.label}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs md:text-sm text-muted-foreground font-sans">{info.label}</p>
                         {info.action ? (
-                          <a 
+                          <a
                             href={info.action}
-                            className="text-foreground font-medium hover:text-primary transition-colors"
+                            className="text-sm md:text-base text-foreground font-medium hover:text-primary transition-colors truncate block group-hover:text-accent"
                             target={info.action.startsWith('http') ? "_blank" : undefined}
                             rel={info.action.startsWith('http') ? "noopener noreferrer" : undefined}
                           >
                             {info.value}
                           </a>
                         ) : (
-                          <p className="text-foreground font-medium">{info.value}</p>
+                          <p className="text-sm md:text-base text-foreground font-medium truncate group-hover:text-accent transition-colors duration-300">{info.value}</p>
                         )}
                       </div>
                     </div>
+                    
+                    {/* Декоративная линия внизу */}
+                    <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
                   </CardContent>
                 </Card>
               );
@@ -98,9 +143,16 @@ export const Contact = () => {
           </div>
         </div>
         
-        <div className="border-t border-border/50 pt-8 text-center text-sm text-muted-foreground font-sans">
-          <p>© 2025 Прозрачный комфорт. Все права защищены.</p>
-          <p className="mt-2">Мы не просто ставим окна — мы создаём комфорт, который видно.</p>
+        <div className="border-t border-border/50 pt-3 md:pt-4 text-center text-xs md:text-sm text-muted-foreground font-sans relative animate-fade-in-up">
+          {/* Декоративный элемент */}
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+          
+          <p className="mb-1">© 2025 Прозрачный комфорт. Все права защищены.</p>
+          <p className="relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full">
+            <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+            <span>Мы не просто ставим окна — мы создаём комфорт, который видно.</span>
+            <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+          </p>
         </div>
       </div>
     </footer>

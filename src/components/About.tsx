@@ -1,13 +1,4 @@
-import { Card } from "@/components/ui/card";
-import { Award, Building2, Calendar, MapPin } from "lucide-react";
 import craftsmanImage from "@/assets/figma-craftsman.png";
-
-const stats = [
-  { icon: Calendar, label: "9 лет опыта", description: "Работаем с 2015 года" },
-  { icon: Building2, label: "3000+ объектов", description: "Довольных клиентов" },
-  { icon: Award, label: "Гарантия", description: "На все работы" },
-  { icon: MapPin, label: "Челябинск и область", description: "Зона обслуживания" },
-];
 
 export const About = () => {
   return (
@@ -26,32 +17,51 @@ export const About = () => {
               Каждый проект мы выполняем с особым вниманием к деталям,
               используя только проверенные материалы высокого качества и современное оборудование.
             </p>
+            
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-card/50 border border-border/30 rounded-lg p-4 hover:shadow-md transition-all duration-300">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-bold mb-1">Индивидуальный подход</h3>
+                    <p className="text-sm text-muted-foreground font-sans">
+                      Разрабатываем решения под ваши задачи и бюджет
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-card/50 border border-border/30 rounded-lg p-4 hover:shadow-md transition-all duration-300">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-bold mb-1">Качественные материалы</h3>
+                    <p className="text-sm text-muted-foreground font-sans">
+                      Используем только сертифицированную ПВХ-пленку и фурнитуру
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-card/50 border border-border/30 rounded-lg p-4 hover:shadow-md transition-all duration-300">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-bold mb-1">Профессиональная установка</h3>
+                    <p className="text-sm text-muted-foreground font-sans">
+                      Опытные мастера гарантируют идеальный результат
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           
           <div className="relative animate-scale-in">
-            <img 
-              src={craftsmanImage} 
-              alt="Мастер на замере" 
+            <img
+              src={craftsmanImage}
+              alt="Мастер на замере"
               className="rounded-2xl shadow-elevated w-full h-auto"
             />
           </div>
-        </div>
-        
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card 
-                key={index} 
-                className="p-6 text-center hover:shadow-lg transition-all duration-300 animate-fade-in-up border-border/50"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <Icon className="w-10 h-10 mx-auto mb-4 text-primary" />
-                <h3 className="text-2xl font-bold mb-2">{stat.label}</h3>
-                <p className="text-sm text-muted-foreground font-sans">{stat.description}</p>
-              </Card>
-            );
-          })}
         </div>
       </div>
     </section>
