@@ -125,7 +125,7 @@ export const Hero = () => {
       </div>
       
       {/* Индикатор прокрутки с улучшенным позиционированием для мобильных */}
-      <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-soft z-20">
+      <div className="absolute bottom-4 md:bottom-8 left-0 right-0 flex justify-center animate-bounce-soft z-20 px-4">
         <button
           onClick={scrollToContent}
           className="flex flex-col items-center text-muted-foreground hover:text-primary transition-all duration-300 group"

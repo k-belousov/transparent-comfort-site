@@ -295,8 +295,8 @@ export const Products = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
-            <CarouselNext className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
+            <CarouselPrevious className="hidden xl:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
+            <CarouselNext className="hidden xl:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
           </Carousel>
           
           {/* Индикаторы для мобильной версии */}

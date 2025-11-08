@@ -395,8 +395,8 @@ export const Gallery = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Предыдущий проект" />
-            <CarouselNext className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Следующий проект" />
+            <CarouselPrevious className="hidden xl:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Предыдущий проект" />
+            <CarouselNext className="hidden xl:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Следующий проект" />
           </Carousel>
           
           {/* Индикаторы для мобильной версии */}
