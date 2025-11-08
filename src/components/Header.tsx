@@ -8,6 +8,19 @@ export const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Блокируем прокрутку body когда открыто мобильное меню
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -129,9 +142,9 @@ export const Header = () => {
 
         {/* Mobile Navigation - Full Screen */}
         {isMenuOpen && (
-          <div id="mobile-menu" className="md:hidden fixed inset-0 z-[100] bg-background/98 backdrop-blur-md flex flex-col" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
+          <div id="mobile-menu" className="md:hidden fixed top-0 left-0 right-0 bottom-0 z-[9999] bg-white flex flex-col h-screen w-screen" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
             {/* Mobile Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border/50 bg-background/50">
+            <div className="flex items-center justify-between p-4 border-b border-border/50 bg-white">
               <img src={logo} alt="Прозрачный комфорт - мягкие окна премиум-класса" className="h-8 w-auto" />
               <Button
                 variant="ghost"
