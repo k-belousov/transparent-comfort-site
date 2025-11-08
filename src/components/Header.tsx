@@ -78,7 +78,7 @@ export const Header = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8" role="navigation" aria-label="Основная навигация">
+            <nav className="hidden md:hidden lg:flex items-center space-x-4 xl:space-x-8" role="navigation" aria-label="Основная навигация">
               {navigation.map((item) => (
                 <button
                   key={item.name}
@@ -92,7 +92,7 @@ export const Header = () => {
             </nav>
 
             {/* CTA Button */}
-            <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
+            <div className="hidden lg:flex items-center space-x-2 lg:space-x-4">
               <Button
                 onClick={() => scrollToSection("calculator")}
                 className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-sm xl:text-base px-3 xl:px-6 py-2 xl:py-2.5 premium-button shimmer-effect relative overflow-hidden group"
@@ -115,7 +115,7 @@ export const Header = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden h-10 w-10"
+              className="md:flex lg:hidden h-10 w-10"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? "Закрыть меню" : "Открыть меню"}
               aria-expanded={isMenuOpen}
@@ -126,8 +126,8 @@ export const Header = () => {
           </div>
 
           {/* Tablet Navigation */}
-          <nav className="hidden md:flex lg:hidden items-center justify-center space-x-3 py-2 border-t border-border/50" role="navigation" aria-label="Навигация для планшетов">
-            {navigation.slice(0, 5).map((item) => (
+          <nav className="hidden" role="navigation" aria-label="Навигация для планшетов">
+            {navigation.slice(0, 4).map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
@@ -142,7 +142,7 @@ export const Header = () => {
 
         {/* Mobile Navigation - Full Screen */}
         {isMenuOpen && (
-          <div id="mobile-menu" className="md:hidden fixed top-0 left-0 right-0 bottom-0 z-[9999] bg-white flex flex-col h-screen w-screen" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
+          <div id="mobile-menu" className="lg:hidden fixed top-0 left-0 right-0 bottom-0 z-[9999] bg-white flex flex-col h-screen w-screen" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
             {/* Mobile Header */}
             <div className="flex items-center justify-between p-4 border-b border-border/50 bg-white">
               <img src={logo} alt="Прозрачный комфорт - мягкие окна премиум-класса" className="h-8 w-auto" />

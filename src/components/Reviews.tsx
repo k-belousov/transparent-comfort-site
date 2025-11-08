@@ -572,8 +572,8 @@ export const Reviews = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Предыдущий отзыв" />
-            <CarouselNext className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Следующий отзыв" />
+            <CarouselPrevious className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Предыдущий отзыв" />
+            <CarouselNext className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" aria-label="Следующий отзыв" />
           </Carousel>
           
           {/* Индикаторы для мобильной версии */}

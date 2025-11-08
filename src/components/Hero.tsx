@@ -71,7 +71,7 @@ export const Hero = () => {
             {/* Подсветка текста */}
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h1>
-          <p className="text-lg md:text-2xl mb-6 md:mb-8 text-muted-foreground font-sans animate-slide-in-left">
+          <p className="text-lg md:text-xl mb-6 md:mb-8 text-muted-foreground font-sans animate-slide-in-left">
             Мягкие окна премиум-класса для террас, кафе и загородных домов
           </p>
           

@@ -260,7 +260,7 @@ export const Products = () => {
       <div className="container mx-auto px-4">
         <div
           ref={headerRef}
-          className={`text-center mb-16 relative transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          className={`text-center mb-16 relative transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
@@ -277,7 +277,7 @@ export const Products = () => {
         {/* Все решения в одном слайдере */}
         <div
           ref={contentRef}
-          className="max-w-6xl mx-auto relative"
+          className="max-w-6xl mx-auto relative transition-all duration-700 delay-300"
         >
           {/* Декоративные элементы по бокам карусели */}
           <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-8 h-32 bg-gradient-to-r from-accent/20 to-transparent rounded-r-full blur-sm" />
@@ -295,8 +295,8 @@ export const Products = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
-            <CarouselNext className="hidden md:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
+            <CarouselPrevious className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
+            <CarouselNext className="hidden lg:flex bg-accent/10 hover:bg-accent/20 border-accent/30" />
           </Carousel>
           
           {/* Индикаторы для мобильной версии */}
