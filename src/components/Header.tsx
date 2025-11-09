@@ -74,18 +74,15 @@ export const Header = () => {
         }
       }
       
-      // console.log(`Screen size: ${width}x${height}, Device type: ${deviceType}, Aspect ratio: ${width/height}`);
       
       // Дополнительная диагностика для скролла
       if (isMenuOpen) {
-        // console.log(`Menu open - Device: ${deviceType}, Height: ${height}, Menu height: ${deviceType === 'tablet' ? 'dynamic' : 'calc(100vh - 4rem)'}`);
         
         // Проверяем, нужно ли добавлять скролл
         const menuElement = document.getElementById('mobile-menu');
         if (menuElement) {
           const menuHeight = menuElement.scrollHeight;
           const availableHeight = deviceType === 'tablet' ? height * 0.7 : height - 64; // 64px = 4rem
-          // console.log(`Menu scroll height: ${menuHeight}px, Available height: ${availableHeight}px, Needs scroll: ${menuHeight > availableHeight}`);
         }
       }
     };
@@ -108,7 +105,6 @@ export const Header = () => {
           // Скрываем индикатор, если пользователь доскроллил до конца
           const isAtBottom = scrollTop + containerHeight >= contentHeight - 10; // 10px погрешность
           setNeedsScroll(hasScrollableContent && !isAtBottom);
-          // console.log(`Menu scroll check: content=${contentHeight}px, container=${containerHeight}px, scrollTop=${scrollTop}px, needsScroll=${hasScrollableContent && !isAtBottom}`);
         }
       };
 
@@ -273,7 +269,6 @@ export const Header = () => {
               onClick={(e) => {
                 // Предотвращаем закрытие при клике на само меню
                 e.stopPropagation();
-                // console.log('Click on mobile menu content', e.target);
               }}
             >
               {/* Mobile Navigation Content - без внутренней шапки */}

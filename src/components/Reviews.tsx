@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Star, Quote, Calendar, MapPin, CheckCircle, Phone, MessageCircle, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useCarouselAnimation } from "@/hooks/use-carousel-animation";
 
 const reviews = [
   {
@@ -241,7 +242,7 @@ const StarRating = ({ rating }: { rating: number }) => {
   );
 };
 
-const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: number }) => {
+const ReviewCard = ({ review, index, showIndicator }: { review: typeof reviews[0], index: number, showIndicator: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false); // Индикаторы появляются только при наведении
 
@@ -253,8 +254,8 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Премиальный индикатор кликабельности - только при наведении */}
-          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} md:hidden`}>
+          {/* Премиальный индикатор кликабельности - при наведении и автопереключении */}
+          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${(isHovered || showIndicator) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} md:hidden`}>
             <span className="flex items-center gap-1">
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -263,7 +264,7 @@ const ReviewCard = ({ review, index }: { review: typeof reviews[0], index: numbe
               Читать отзыв
             </span>
           </div>
-          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} hidden md:block`}>
+          <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${(isHovered || showIndicator) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} hidden md:block`}>
             <span className="flex items-center gap-1">
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -487,46 +488,24 @@ const ConsultationDialog = () => {
 
 export const Reviews = () => {
   const [api, setApi] = useState<CarouselApi | null>(null);
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
 
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-
-    // Автоскроллинг каждые 5 секунд
-    intervalRef.current = setInterval(() => {
-      api.scrollNext();
-    }, 5000);
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [api]);
+  // Используем новый хук для анимаций карусели
+  const {
+    current,
+    showIndicator,
+    handleManualSwitch
+  } = useCarouselAnimation(api, reviews.length, {
+    interval: 5000,
+    showIndicatorDuration: 2000,
+    indicatorDelay: 500
+  });
 
   const handleDotClick = (index: number) => {
-    if (api) {
-      api.scrollTo(index);
-      // Сбрасываем таймер при ручном переключении
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      intervalRef.current = setInterval(() => {
-        api.scrollNext();
-      }, 5000);
+    // Предотвращаем многократные вызовы при быстром клике
+    if (current !== index) {
+      handleManualSwitch(index);
     }
   };
 
@@ -568,7 +547,7 @@ export const Reviews = () => {
             <CarouselContent>
               {reviews.map((review, index) => (
                 <CarouselItem key={review.id} className={`md:basis-1/2 lg:basis-1/3 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${index * 100}ms` }}>
-                  <ReviewCard review={review} index={index} />
+                  <ReviewCard review={review} index={index} showIndicator={showIndicator && index === current} />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -578,17 +557,17 @@ export const Reviews = () => {
           
           {/* Индикаторы для мобильной версии */}
           <div className="flex justify-center mt-4 gap-1 md:hidden" role="tablist" aria-label="Навигация по отзывам">
-            {Array.from({ length: Math.min(count, 6) }).map((_, index) => (
+            {Array.from({ length: Math.min(reviews.length, 6) }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleDotClick(index)}
                 className={`transition-all duration-300 ${
-                  index === current - 1
+                  index === current
                     ? "w-8 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30"
                     : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50"
                 }`}
                 role="tab"
-                aria-selected={index === current - 1}
+                aria-selected={index === current}
                 aria-controls={`review-slide-${index}`}
                 aria-label={`Перейти к отзыву ${index + 1}`}
               />
@@ -597,17 +576,17 @@ export const Reviews = () => {
           
           {/* Индикаторы для десктопной версии */}
           <div className="hidden md:flex justify-center mt-6 gap-1 flex-wrap max-w-lg mx-auto" role="tablist" aria-label="Навигация по отзывам">
-            {Array.from({ length: count }).map((_, index) => (
+            {Array.from({ length: reviews.length }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleDotClick(index)}
                 className={`transition-all duration-300 ${
-                  index === current - 1
+                  index === current
                     ? "w-6 h-2 bg-gradient-to-r from-accent to-primary rounded-full shadow-lg shadow-accent/30 scale-110"
                     : "w-2 h-2 bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 hover:scale-125"
                 }`}
                 role="tab"
-                aria-selected={index === current - 1}
+                aria-selected={index === current}
                 aria-controls={`review-slide-${index}`}
                 aria-label={`Перейти к отзыву ${index + 1}`}
               />

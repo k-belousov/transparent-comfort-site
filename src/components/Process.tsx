@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Phone, Ruler, Factory, Wrench, Award } from "lucide-react";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
 
 const steps = [
   {
@@ -38,6 +40,34 @@ const steps = [
 export const Process = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
+  
+  // Автоматические анимации для шагов процесса
+  const {
+    activeIndex,
+    setElementRef,
+    startAnimation,
+    stopAnimation,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleClick,
+    startAnimationAfterScroll
+  } = useSequentialAnimation(5, {
+    interval: 1200,
+    cycleInterval: 8000,
+    startDelay: 2000,
+    pauseOnHover: true,
+    mobileClickToRestart: true,
+    direction: 'left-to-right'
+  });
+
+  // Запускаем/останавливаем анимации при появлении/скрытии секции
+  useEffect(() => {
+    if (contentVisible) {
+      startAnimation();
+    } else {
+      stopAnimation();
+    }
+  }, [contentVisible, startAnimation, stopAnimation]);
 
   return (
     <section className="py-20 bg-gradient-to-b from-background via-card/30 to-card relative overflow-hidden">
@@ -73,16 +103,24 @@ export const Process = () => {
         <div
           ref={contentRef}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleClick}
         >
           {/* Соединяющая линия между шагами */}
           <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent transform -translate-y-1/2 z-0" />
           
           {steps.map((step, index) => {
             const Icon = step.icon;
+            const isActive = activeIndex === index;
+            const isVisible = contentVisible;
+            const isEven = index % 2 === 0;
+            
             return (
               <Card
                 key={index}
-                className={`group relative overflow-hidden border-border/50 hover:premium-shadow transition-all duration-500 premium-card z-10 ${index % 2 === 0 ? 'hover:scale-[1.03]' : 'hover:scale-[1.02]'} ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                ref={setElementRef(index)}
+                className={`group relative overflow-hidden border-border/50 hover:premium-shadow transition-all duration-1000 premium-card z-10 ${isEven ? 'hover:scale-[1.03]' : 'hover:scale-[1.02]'} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${isActive ? 'scale-105 shadow-lg shadow-accent/20 border-accent/50' : ''}`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Декоративный уголок */}
@@ -105,17 +143,17 @@ export const Process = () => {
                 
                 <CardContent className="p-3 md:p-6 text-center relative">
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className={`text-6xl md:text-8xl font-bold text-accent/20 transition-all duration-500 group-hover:text-accent/30 ${index % 2 === 0 ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'}`}>
+                    <div className={`text-6xl md:text-8xl font-bold text-accent/20 transition-all duration-1000 group-hover:text-accent/30 ${isEven ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'} ${isActive ? 'text-accent/30' + (isEven ? ' rotate-6' : ' -rotate-6') : ''}`}>
                       {step.number}
                     </div>
                   </div>
                   <div className="relative z-10">
-                    <div className={`p-1.5 md:p-3 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 w-fit mx-auto mb-2 md:mb-4 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-300 relative ${index % 2 === 0 ? 'group-hover:rotate-12' : 'group-hover:-rotate-12'}`}>
-                      <Icon className="w-4 h-4 md:w-6 md:h-6 text-primary relative z-10" />
+                    <div className={`p-1.5 md:p-3 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 w-fit mx-auto mb-2 md:mb-4 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-1000 relative ${isEven ? 'group-hover:rotate-12' : 'group-hover:-rotate-12'} ${isActive ? 'from-accent/40 to-primary/40' + (isEven ? ' rotate-12' : ' -rotate-12') : ''}`}>
+                      <Icon className={`w-4 h-4 md:w-6 md:h-6 text-primary relative z-10 transition-all duration-1000 ${isActive ? 'text-accent scale-110' : ''}`} />
                       {/* Свечение вокруг иконки */}
-                      <div className="absolute inset-0 bg-accent/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+                      <div className={`absolute inset-0 bg-accent/20 rounded-full blur-md transition-opacity duration-1000 ${isActive ? 'opacity-100 animate-pulse' : 'opacity-0 group-hover:opacity-100'}`} />
                     </div>
-                    <h3 className="text-base md:text-xl font-bold mb-1 md:mb-3 transition-colors duration-300 group-hover:text-accent">{step.title}</h3>
+                    <h3 className={`text-base md:text-xl font-bold mb-1 md:mb-3 transition-colors duration-1000 ${isActive ? 'text-accent' : 'group-hover:text-accent'}`}>{step.title}</h3>
                     <p className="text-xs md:text-sm text-muted-foreground font-sans line-clamp-2 leading-relaxed">
                       {step.description}
                     </p>

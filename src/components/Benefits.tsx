@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Globe, Clock, Hammer, Sparkles, Shield, CheckCircle } from "lucide-react";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
 
 const benefits = [
   {
@@ -38,6 +40,34 @@ const benefits = [
 export const Benefits = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: contentRef, isVisible: contentVisible } = useScrollReveal({ threshold: 0.1 });
+  
+  // Автоматические анимации для преимуществ
+  const {
+    activeIndex,
+    setElementRef,
+    startAnimation,
+    stopAnimation,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleClick,
+    startAnimationAfterScroll
+  } = useSequentialAnimation(6, {
+    interval: 1500,
+    cycleInterval: 9000,
+    startDelay: 2500,
+    pauseOnHover: true,
+    mobileClickToRestart: true,
+    direction: 'left-to-right'
+  });
+
+  // Запускаем/останавливаем анимации при появлении/скрытии секции
+  useEffect(() => {
+    if (contentVisible) {
+      startAnimation();
+    } else {
+      stopAnimation();
+    }
+  }, [contentVisible, startAnimation, stopAnimation]);
 
   return (
     <section className="py-20 bg-gradient-to-b from-card via-card/50 to-background relative overflow-hidden">
@@ -68,13 +98,21 @@ export const Benefits = () => {
         <div
           ref={contentRef}
           className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleClick}
         >
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
+            const isActive = activeIndex === index;
+            const isVisible = contentVisible;
+            const isEven = index % 2 === 0;
+            
             return (
               <Card
                 key={index}
-                className={`group p-4 md:p-6 hover:premium-shadow transition-all duration-500 border-border/50 premium-card relative overflow-hidden ${index % 2 === 0 ? 'hover:scale-[1.02]' : 'hover:scale-[1.03]'} ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                ref={setElementRef(index)}
+                className={`group p-4 md:p-6 hover:premium-shadow transition-all duration-1000 border-border/50 premium-card relative overflow-hidden ${isEven ? 'hover:scale-[1.02]' : 'hover:scale-[1.03]'} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${isActive ? 'scale-105 shadow-lg shadow-accent/20 border-accent/50' : ''}`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Декоративный уголок */}
@@ -97,13 +135,13 @@ export const Benefits = () => {
                 
                 <CardContent className="p-0 relative">
                   <div className="flex items-start gap-3 md:gap-4">
-                    <div className={`p-2 md:p-3 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-300 relative ${index % 2 === 0 ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'}`}>
-                      <Icon className="w-5 h-5 md:w-6 md:h-6 text-primary relative z-10" />
+                    <div className={`p-2 md:p-3 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-1000 relative ${isEven ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'} ${isActive ? 'from-accent/40 to-primary/40' + (isEven ? ' rotate-6' : ' -rotate-6') : ''}`}>
+                      <Icon className={`w-5 h-5 md:w-6 md:h-6 text-primary relative z-10 transition-all duration-1000 ${isActive ? 'text-accent scale-110' : ''}`} />
                       {/* Свечение вокруг иконки */}
-                      <div className="absolute inset-0 bg-accent/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+                      <div className={`absolute inset-0 bg-accent/20 rounded-full blur-md transition-opacity duration-1000 ${isActive ? 'opacity-100 animate-pulse' : 'opacity-0 group-hover:opacity-100'}`} />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-base md:text-xl font-bold mb-1 md:mb-2 transition-colors duration-300 group-hover:text-accent">{benefit.title}</h3>
+                      <h3 className={`text-base md:text-xl font-bold mb-1 md:mb-2 transition-colors duration-1000 ${isActive ? 'text-accent' : 'group-hover:text-accent'}`}>{benefit.title}</h3>
                       <p className="text-muted-foreground font-sans text-xs md:text-sm leading-relaxed">
                         {benefit.description}
                       </p>

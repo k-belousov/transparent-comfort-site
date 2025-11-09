@@ -3,10 +3,35 @@ import { Shield, ChevronDown, Calendar, Building2, Award, MapPin, Sparkles } fro
 import heroImage from "@/assets/figma-hero-image.png";
 import logo from "@/assets/logo.svg";
 import { useState, useEffect } from "react";
+import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
 
 export const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   
+  // Автоматические анимации для преимуществ в хиро секции
+  const {
+    activeIndex,
+    setElementRef,
+    startAnimation,
+    stopAnimation,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleClick,
+    startAnimationAfterScroll
+  } = useSequentialAnimation(4, {
+    interval: 1500,
+    cycleInterval: 6000,
+    startDelay: 2000,
+    pauseOnHover: true,
+    mobileClickToRestart: true,
+    direction: 'left-to-right'
+  });
+
+  // Запускаем/останавливаем анимации при загрузке страницы
+  useEffect(() => {
+    startAnimation();
+  }, [startAnimation]);
+
   useEffect(() => {
     setIsLoaded(true);
   }, []);
@@ -99,22 +124,30 @@ export const Hero = () => {
             </Button>
           </div>
           
-          {/* Преимущества в hero секции в виде тегов - сетка 2x2 с премиальными эффектами */}
-          <div className="grid grid-cols-2 gap-2 md:gap-3 mb-6 md:mb-8 max-w-md">
+          {/* Преимущества в hero секции в виде тегов - сетка 2x2 с премиальными эффектами и анимациями */}
+          <div
+            className="grid grid-cols-2 gap-2 md:gap-3 mb-6 md:mb-8 max-w-md"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
+          >
             {stats.map((stat, index) => {
               const Icon = stat.icon;
+              const isActive = activeIndex === index;
+              
               return (
                 <div
                   key={index}
-                  className={`bg-card/80 backdrop-blur-sm rounded-full px-2 py-1.5 md:px-3 md:py-2 flex items-center gap-1.5 md:gap-2 hover:bg-card/90 transition-all duration-300 hover:scale-105 hover-lift animate-fade-in-up premium-card`}
+                  ref={setElementRef(index)}
+                  className={`bg-card/80 backdrop-blur-sm rounded-full px-2 py-1.5 md:px-3 md:py-2 flex items-center gap-1.5 md:gap-2 hover:bg-card/90 transition-all duration-500 hover:scale-105 hover-lift animate-fade-in-up premium-card group ${isActive ? 'scale-105 shadow-lg shadow-accent/20 border-accent/50' : ''}`}
                   style={{ animationDelay: `${800 + index * 100}ms` }}
                 >
-                  <div className="relative">
-                    <Icon className="w-3 h-3 md:w-4 md:h-4 text-primary" />
-                    <div className="absolute inset-0 bg-accent/20 rounded-full blur-sm animate-pulse" />
+                  <div className={`relative transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 ${isActive ? 'rotate-6 scale-110' : ''}`}>
+                    <Icon className={`w-3 h-3 md:w-4 md:h-4 text-primary transition-colors duration-300 group-hover:text-accent ${isActive ? 'text-accent' : ''}`} />
+                    <div className={`absolute inset-0 bg-accent/20 rounded-full blur-sm animate-pulse transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-xs md:text-sm font-bold">{stat.label}</span>
+                    <span className={`text-xs md:text-sm font-bold transition-colors duration-300 group-hover:text-accent ${isActive ? 'text-accent' : ''}`}>{stat.label}</span>
                     <span className="text-xs text-muted-foreground font-sans hidden md:block">{stat.description}</span>
                   </div>
                 </div>

@@ -4,6 +4,8 @@ import { Phone, Mail, MapPin, MessageCircle, Clock } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import { toast } from "sonner";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
+import { useEffect } from "react";
 
 const contactInfo = [
   {
@@ -41,6 +43,34 @@ const contactInfo = [
 export const Contact = () => {
   const { ref: leftRef, isVisible: leftVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: rightRef, isVisible: rightVisible } = useScrollReveal({ threshold: 0.2 });
+  
+  // Автоматические анимации для контактных карточек
+  const {
+    activeIndex,
+    setElementRef,
+    startAnimation,
+    stopAnimation,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleClick,
+    startAnimationAfterScroll
+  } = useSequentialAnimation(5, {
+    interval: 1000,
+    cycleInterval: 7000,
+    startDelay: 1000,
+    pauseOnHover: true,
+    mobileClickToRestart: true,
+    direction: 'left-to-right'
+  });
+
+  // Запускаем/останавливаем анимации при появлении/скрытии секции
+  useEffect(() => {
+    if (rightVisible) {
+      startAnimation();
+    } else {
+      stopAnimation();
+    }
+  }, [rightVisible, startAnimation, stopAnimation]);
 
   const handleCallRequest = () => {
     toast.success("Спасибо! Мы перезвоним вам в течение 15 минут");
@@ -95,13 +125,16 @@ export const Contact = () => {
             ref={rightRef}
             className={`space-y-3 md:space-y-4 transition-all duration-700 ${rightVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             style={{ transitionDelay: '200ms' }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
               return (
                 <Card
                   key={index}
-                  className="border-border/50 hover:premium-shadow transition-all duration-500 premium-card relative overflow-hidden group"
+                  ref={setElementRef(index)}
+                  className={`border-border/50 hover:premium-shadow transition-all duration-1000 premium-card relative overflow-hidden group ${rightVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${activeIndex === index ? 'scale-105 shadow-lg shadow-accent/20 border-accent/50' : ''}`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {/* Декоративный уголок */}
@@ -124,17 +157,17 @@ export const Contact = () => {
                   
                   <CardContent className="p-3 md:p-4 relative">
                     <div className="flex items-center gap-3 md:gap-4">
-                      <div className={`p-2 md:p-3 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-300 relative ${index % 2 === 0 ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'}`}>
-                        <Icon className="w-4 h-4 md:w-5 md:h-5 text-primary relative z-10" />
+                      <div className={`p-2 md:p-3 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-1000 relative ${index % 2 === 0 ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'} ${activeIndex === index ? 'from-accent/40 to-primary/40' + (index % 2 === 0 ? ' rotate-6' : ' -rotate-6') : ''}`}>
+                        <Icon className={`w-4 h-4 md:w-5 md:h-5 text-primary relative z-10 transition-all duration-1000 ${activeIndex === index ? 'text-accent scale-110' : ''}`} />
                         {/* Свечение вокруг иконки */}
-                        <div className="absolute inset-0 bg-accent/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+                        <div className={`absolute inset-0 bg-accent/20 rounded-full blur-md transition-opacity duration-1000 ${activeIndex === index ? 'opacity-100 animate-pulse' : 'opacity-0 group-hover:opacity-100'}`} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs md:text-sm text-muted-foreground font-sans">{info.label}</p>
                         {info.action ? (
                           <a
                             href={info.action}
-                            className="text-sm md:text-base text-foreground font-medium hover:text-primary transition-colors truncate block group-hover:text-accent"
+                            className={`text-sm md:text-base text-foreground font-medium hover:text-primary transition-colors duration-1000 truncate block ${activeIndex === index ? 'text-accent' : 'group-hover:text-accent'}`}
                             target={info.action.startsWith('http') ? "_blank" : undefined}
                             rel={info.action.startsWith('http') ? "noopener noreferrer" : undefined}
                             aria-label={`${info.label}: ${info.value}`}
@@ -142,7 +175,7 @@ export const Contact = () => {
                             {info.value}
                           </a>
                         ) : (
-                          <p className="text-sm md:text-base text-foreground font-medium truncate group-hover:text-accent transition-colors duration-300" aria-label={`${info.label}: ${info.value}`}>{info.value}</p>
+                          <p className={`text-sm md:text-base text-foreground font-medium truncate transition-colors duration-1000 ${activeIndex === index ? 'text-accent' : 'group-hover:text-accent'}`} aria-label={`${info.label}: ${info.value}`}>{info.value}</p>
                         )}
                       </div>
                     </div>
