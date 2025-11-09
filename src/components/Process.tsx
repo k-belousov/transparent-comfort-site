@@ -50,7 +50,7 @@ export const Process = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleClick,
-    startAnimationAfterScroll
+    // startAnimationAfterScroll
   } = useSequentialAnimation(5, {
     interval: 1200,
     cycleInterval: 8000,

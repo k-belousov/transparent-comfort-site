@@ -17,7 +17,7 @@ export const Hero = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleClick,
-    startAnimationAfterScroll
+    // startAnimationAfterScroll
   } = useSequentialAnimation(4, {
     interval: 1500,
     cycleInterval: 6000,

@@ -16,7 +16,7 @@ export const About = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleClick,
-    startAnimationAfterScroll
+    // startAnimationAfterScroll
   } = useSequentialAnimation(3, {
     interval: 2000,
     cycleInterval: 8000,

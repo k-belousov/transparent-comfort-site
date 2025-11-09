@@ -53,7 +53,7 @@ export const Contact = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleClick,
-    startAnimationAfterScroll
+    // startAnimationAfterScroll
   } = useSequentialAnimation(5, {
     interval: 1000,
     cycleInterval: 7000,

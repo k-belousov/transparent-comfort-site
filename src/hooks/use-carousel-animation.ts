@@ -140,9 +140,9 @@ export const useCarouselAnimation = (
   return {
     current,
     showIndicator,
-    autoSwitching,
+    // autoSwitching, // Убрано, так как не используется
     handleManualSwitch,
-    stopAutoSwitch,
-    startAutoSwitch
-  };
+    // stopAutoSwitch, // Убрано, так как не используется
+    // startAutoSwitch // Убрано, так как не используется
+ };
 };

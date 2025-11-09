@@ -175,12 +175,12 @@ export const useSequentialAnimation = <T extends HTMLElement = HTMLDivElement>(
     }, startDelay);
   }, [clearTimers, startSequentialAnimation, startDelay]);
 
-  // Функция для запуска анимаций после скролла
-  const startAnimationAfterScroll = useCallback(() => {
-    setTimeout(() => {
-      startAnimation();
-    }, 1000); // Задержка 1 секунда после скролла
-  }, [startAnimation]);
+  // Функция для запуска анимаций после скролла - НЕ ИСПОЛЬЗУЕТСЯ
+  // const startAnimationAfterScroll = useCallback(() => {
+  //   setTimeout(() => {
+  //     startAnimation();
+  //   }, 1000); // Задержка 1 секунда после скролла
+  // }, [startAnimation]);
 
   // Остановка анимаций при скрытии элемента
   const stopAnimation = useCallback(() => {
@@ -212,7 +212,7 @@ export const useSequentialAnimation = <T extends HTMLElement = HTMLDivElement>(
     handleMouseEnter,
     handleMouseLeave,
     handleClick,
-    startAnimationAfterScroll,
-    elementRefs
+    // startAnimationAfterScroll, // Убрано, так как не используется
+    // elementRefs // Убрано, так как не используется
   };
 };

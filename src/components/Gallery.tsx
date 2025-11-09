@@ -320,6 +320,7 @@ export const Gallery = () => {
     current,
     showIndicator,
     handleManualSwitch
+    // stopAutoSwitch, startAutoSwitch // Убрано, так как не используется
   } = useCarouselAnimation(api, galleryItems.length, {
     interval: 5000,
     showIndicatorDuration: 2000,

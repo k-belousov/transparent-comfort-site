@@ -50,7 +50,7 @@ export const Benefits = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleClick,
-    startAnimationAfterScroll
+    // startAnimationAfterScroll
   } = useSequentialAnimation(6, {
     interval: 1500,
     cycleInterval: 9000,
