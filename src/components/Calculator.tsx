@@ -32,7 +32,7 @@ const typeNames = {
 
 const materialNames = {
   pvc: "ПВХ стандарт",
-  premium: "ПВХ премиум",
+ premium: "ПВХ премиум",
   japanese: "Материал высокого качества",
 };
 
@@ -284,7 +284,7 @@ export const Calculator = () => {
                     <SelectTrigger id="material" className="hover:border-accent/50 transition-colors">
                       <SelectValue placeholder="Выберите материал" />
                     </SelectTrigger>
-                    <SelectContent className="border-accent/20">
+                    <SelectContent className="border-accent/20 max-w-[calc(100vw-2rem)]">
                       <SelectItem value="pvc">ПВХ стандарт - долговечный и практичный</SelectItem>
                       <SelectItem value="premium">ПВХ премиум - повышенная прочность</SelectItem>
                       <SelectItem value="japanese">Материал высокого качества - максимальная прозрачность</SelectItem>
