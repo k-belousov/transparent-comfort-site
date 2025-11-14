@@ -2,10 +2,10 @@
 
 **Сайт-визитка компании "Прозрачный комфорт" — профессиональная установка мягких окон премиум-класса в Челябинске и области**
 
-[![GitHub stars](https://img.shields.io/github/stars/username/transparent-comfort-landing-main?style=social)](https://github.com/username/transparent-comfort-landing-main/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/username/transparent-comfort-landing-main?style=social)](https://github.com/username/transparent-comfort-landing-main/network)
-[![GitHub license](https://img.shields.io/github/license/username/transparent-comfort-landing-main)](https://github.com/username/transparent-comfort-landing-main/blob/main/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/username/transparent-comfort-landing-main)](https://github.com/username/transparent-comfort-landing-main/issues)
+[![GitHub stars](https://img.shields.io/github/stars/k-belousov/transparent-comfort-landing-main?style=social)](https://github.com/k-belousov/transparent-comfort-landing-main/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/k-belousov/transparent-comfort-landing-main?style=social)](https://github.com/k-belousov/transparent-comfort-landing-main/network)
+[![GitHub license](https://img.shields.io/github/license/k-belousov/transparent-comfort-landing-main)](https://github.com/k-belousov/transparent-comfort-landing-main/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/k-belousov/transparent-comfort-landing-main)](https://github.com/k-belousov/transparent-comfort-landing-main/issues)
 
 ## 📋 Оглавление
 
@@ -164,7 +164,7 @@ transparent-comfort-landing-main/
 
 ```bash
 # 1. Клонируйте репозиторий
-git clone https://github.com/username/transparent-comfort-landing-main.git
+git clone https://github.com/k-belousov/transparent-comfort-landing-main.git
 cd transparent-comfort-landing-main
 
 # 2. Установите зависимости
@@ -174,7 +174,7 @@ npm install
 npm run dev
 
 # 4. Откройте браузер по адресу
-http://localhost:8080
+https://прозрачный-комфорт.рф
 ```
 
 ### Сборка для продакшена:

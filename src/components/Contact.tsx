@@ -18,13 +18,13 @@ const contactInfo = [
     icon: MessageCircle,
     label: "WhatsApp",
     value: "Написать в WhatsApp",
-    action: "https://wa.me/73510000000",
+    action: "https://wa.me/7XXXXXXXXXX",
   },
   {
     icon: Mail,
     label: "Email",
-    value: "info@prozrachnycomfort.ru",
-    action: "mailto:info@prozrachnycomfort.ru",
+    value: "example@email.com",
+    action: "mailto:example@email.com",
   },
   {
     icon: MapPin,
@@ -108,7 +108,7 @@ export const Contact = () => {
               Готовы ответить на любые вопросы и помочь с выбором мягких окон для вашего объекта.
             </p>
             <Button
-              onClick={() => window.open("tel:+73510000000")}
+              onClick={() => window.open("tel:+7XXXXXXXXXX")}
               size="lg"
               className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-base md:text-lg py-3 md:py-4 px-6 premium-button shimmer-effect relative overflow-hidden group"
               aria-label="Позвонить в компанию Прозрачный комфорт"

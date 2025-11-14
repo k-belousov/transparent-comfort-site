@@ -102,13 +102,13 @@ export const Calculator = () => {
     
     switch (method) {
       case 'phone':
-        window.open('tel:+73510000000');
+        window.open('tel:+7XXXXXXXXXX');
         break;
       case 'whatsapp':
-        window.open(`https://wa.me/73510000000?text=${encodeURIComponent(message)}`);
+        window.open(`https://wa.me/7XXXXXXXXXX?text=${encodeURIComponent(message)}`);
         break;
       case 'email':
-        window.open(`mailto:info@prozrachnycomfort.ru?subject=Запрос на расчет мягких окон&body=${encodeURIComponent(message)}`);
+        window.open(`mailto:example@email.com?subject=Запрос на расчет мягких окон&body=${encodeURIComponent(message)}`);
         break;
     }
   };

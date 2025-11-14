@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://прозрачный-комфорт.рф/sitemap.xml
