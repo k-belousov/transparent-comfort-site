@@ -4,6 +4,7 @@ import heroImage from "@/assets/figma-hero-image.png";
 import logo from "@/assets/logo.svg";
 import { useState, useEffect } from "react";
 import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
+import { trackGoal } from "@/components/YandexMetrika";
 
 export const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -41,6 +42,9 @@ export const Hero = () => {
       top: window.innerHeight,
       behavior: 'smooth'
     });
+    
+    // Отслеживание цели
+    trackGoal('HERO_SCROLL_DOWN');
   };
 
   const stats = [
@@ -104,7 +108,10 @@ export const Hero = () => {
             <Button
               size="lg"
               className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl premium-button shimmer-effect relative overflow-hidden group"
-              onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' });
+                trackGoal('HERO_CALCULATOR_CLICK');
+              }}
               aria-label="Рассчитать стоимость мягких окон"
             >
               <span className="relative z-10 flex items-center">
@@ -117,7 +124,10 @@ export const Hero = () => {
               size="lg"
               variant="outline"
               className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 border-2 hover:bg-secondary/50 transition-all duration-300 hover:scale-105 active:scale-95 premium-button glass-effect"
-              onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+                trackGoal('HERO_GALLERY_CLICK');
+              }}
               aria-label="Посмотреть примеры работ в галерее"
             >
               Смотреть примеры

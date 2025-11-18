@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, ChevronUp, ChevronDown } from "lucide-react";
 import logo from "@/assets/logo.svg";
+import { trackGoal } from "@/components/YandexMetrika";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -133,6 +134,12 @@ export const Header = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
       setIsMenuOpen(false);
+      
+      // Отслеживание цели
+      trackGoal('HEADER_NAVIGATION', {
+        section: sectionId,
+        fromMobile: isMenuOpen
+      });
     }
   };
 
@@ -149,6 +156,9 @@ export const Header = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    
+    // Отслеживание цели
+    trackGoal('SCROLL_TO_TOP');
   };
 
   return (
@@ -194,7 +204,10 @@ export const Header = () => {
                 variant="outline"
                 size="icon"
                 className="hover:bg-accent/20 transition-all duration-300 h-9 w-9 xl:h-10 xl:w-10"
-                onClick={() => window.open("tel:+73510000000")}
+                onClick={() => {
+                  window.open("tel:+73510000000");
+                  trackGoal('HEADER_PHONE_CLICK');
+                }}
               >
                 <Phone className="w-3 h-3 xl:w-4 xl:h-4" />
               </Button>
@@ -328,7 +341,10 @@ export const Header = () => {
                     <Button
                       variant="outline"
                       className="w-full hover:bg-accent/20 transition-all duration-300 text-lg py-4"
-                      onClick={() => window.open("tel:+73510000000")}
+                      onClick={() => {
+                        window.open("tel:+73510000000");
+                        trackGoal('MOBILE_MENU_PHONE_CLICK');
+                      }}
                     >
                       <Phone className="w-5 h-5 mr-3" />
                       Позвонить

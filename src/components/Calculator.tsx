@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calculator as CalcIcon, Phone, Mail, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { trackGoal } from "@/components/YandexMetrika";
 
 const typePrices = {
   home: 1200,
@@ -93,12 +94,27 @@ export const Calculator = () => {
       setShowContactButtons(true);
       setIsCalculating(false);
       toast.success("Расчет выполнен успешно!");
+      
+      // Отслеживание цели
+      trackGoal('CALCULATOR_SUCCESS', {
+        price: price,
+        type: typeNames[formData.type as keyof typeof typeNames],
+        material: materialNames[formData.material as keyof typeof materialNames],
+        area: `${formData.width}x${formData.height}`
+      });
     }, 1500);
   };
 
   const handleContact = (method: 'phone' | 'whatsapp' | 'email') => {
     const materialName = materialNames[formData.material as keyof typeof materialNames] || "Не указан";
     const message = `Здравствуйте! Я рассчитал(а) стоимость мягких окон для ${typeNames[formData.type as keyof typeof typeNames]} площадью ${formData.width}м × ${formData.height}м. Материал: ${materialName}. Примерная стоимость: ${calculatedPrice?.toLocaleString()} руб. Хотел(а) бы получить точный расчет.`;
+    
+    // Отслеживание цели
+    trackGoal('CALCULATOR_CONTACT', {
+      method: method,
+      price: calculatedPrice,
+      type: typeNames[formData.type as keyof typeof typeNames]
+    });
     
     switch (method) {
       case 'phone':
@@ -128,6 +144,12 @@ export const Calculator = () => {
       toast.error("Пожалуйста, введите корректные размеры");
       return;
     }
+    
+    // Отслеживание цели
+    trackGoal('CALCULATOR_FORM_SUBMIT', {
+      type: typeNames[formData.type as keyof typeof typeNames],
+      area: `${formData.width}x${formData.height}`
+    });
     
     toast.success("Спасибо! Наш инженер свяжется с вами в ближайшее время");
     setFormData({ type: "", width: "", height: "", material: "" });

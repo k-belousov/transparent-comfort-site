@@ -7,6 +7,7 @@ import { Star, Quote, Calendar, MapPin, CheckCircle, Phone, MessageCircle, Mail 
 import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useCarouselAnimation } from "@/hooks/use-carousel-animation";
+import { trackGoal } from "@/components/YandexMetrika";
 
 const reviews = [
   {
@@ -246,6 +247,14 @@ const ReviewCard = ({ review, index, showIndicator }: { review: typeof reviews[0
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false); // Индикаторы появляются только при наведении
 
+  const handleCardClick = () => {
+    trackGoal('REVIEW_CARD_OPEN', {
+      review: review.name,
+      project: review.project,
+      rating: review.rating
+    });
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -253,6 +262,7 @@ const ReviewCard = ({ review, index, showIndicator }: { review: typeof reviews[0
           className={`group cursor-pointer hover:premium-shadow transition-all duration-500 border-border/50 h-full flex flex-col relative premium-card ${isHovered ? 'scale-[1.02]' : ''}`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onClick={handleCardClick}
         >
           {/* Премиальный индикатор кликабельности - при наведении и автопереключении */}
           <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${(isHovered || showIndicator) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'} md:hidden`}>
@@ -422,6 +432,11 @@ const ConsultationDialog = () => {
 
   const handleContact = (method: 'phone' | 'whatsapp' | 'email') => {
     const message = "Здравствуйте! Я хотел(а) бы получить бесплатную консультацию по мягким окнам.";
+    
+    // Отслеживание цели
+    trackGoal('REVIEWS_CONSULTATION', {
+      method: method
+    });
     
     switch (method) {
       case 'phone':

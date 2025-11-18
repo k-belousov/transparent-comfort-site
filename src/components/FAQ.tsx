@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { trackGoal } from "@/components/YandexMetrika";
 
 const faqs = [
   {
@@ -57,6 +58,12 @@ export const FAQ = () => {
                   className="text-left text-lg font-semibold hover:text-primary transition-colors"
                   aria-controls={`faq-answer-${index}`}
                   aria-expanded="false"
+                  onClick={() => {
+                    trackGoal('FAQ_QUESTION_OPEN', {
+                      question: faq.question,
+                      index: index
+                    });
+                  }}
                 >
                   {faq.question}
                 </AccordionTrigger>

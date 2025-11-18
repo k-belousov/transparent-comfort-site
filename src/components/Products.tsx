@@ -11,6 +11,7 @@ import gazeboImage from "@/assets/figma-gazebo.png";
 import coversImage1 from "@/assets/figma-covers-1.png";
 import coversImage2 from "@/assets/figma-covers-2.png";
 import coversImage3 from "@/assets/figma-covers-3.png";
+import { trackGoal } from "@/components/YandexMetrika";
 
 const products = [
   {
@@ -65,6 +66,14 @@ const ProductCard = ({ product, index, showIndicator, currentSlide }: { product:
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  const handleCardClick = () => {
+    trackGoal('PRODUCT_CARD_CLICK', {
+      product: product.title,
+      price: product.price,
+      index: index
+    });
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -72,6 +81,7 @@ const ProductCard = ({ product, index, showIndicator, currentSlide }: { product:
           className={`group cursor-pointer overflow-hidden border-border/50 hover:premium-shadow transition-all duration-500 h-full flex flex-col relative premium-card ${isHovered ? 'scale-[1.02]' : ''}`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onClick={handleCardClick}
         >
           {/* Премиальный индикатор кликабельности */}
           <div className={`absolute top-2 right-2 z-10 bg-gradient-to-r from-accent/80 to-primary/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-all duration-300 ${(isHovered || showIndicator) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>

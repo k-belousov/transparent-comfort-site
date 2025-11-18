@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
 import { useEffect } from "react";
+import { trackGoal } from "@/components/YandexMetrika";
 
 const contactInfo = [
   {
@@ -74,6 +75,9 @@ export const Contact = () => {
 
   const handleCallRequest = () => {
     toast.success("Спасибо! Мы перезвоним вам в течение 15 минут");
+    
+    // Отслеживание цели
+    trackGoal('CONTACT_CALL_REQUEST');
   };
 
   return (
@@ -108,7 +112,10 @@ export const Contact = () => {
               Готовы ответить на любые вопросы и помочь с выбором мягких окон для вашего объекта.
             </p>
             <Button
-              onClick={() => window.open("tel:+7XXXXXXXXXX")}
+              onClick={() => {
+                window.open("tel:+7XXXXXXXXXX");
+                trackGoal('CONTACT_FOOTER_PHONE_CLICK');
+              }}
               size="lg"
               className="bg-gradient-to-r from-accent to-primary hover:from-primary hover:to-accent transition-all duration-300 shadow-lg hover:shadow-xl text-base md:text-lg py-3 md:py-4 px-6 premium-button shimmer-effect relative overflow-hidden group"
               aria-label="Позвонить в компанию Прозрачный комфорт"
@@ -167,6 +174,14 @@ export const Contact = () => {
                         {info.action ? (
                           <a
                             href={info.action}
+                            onClick={() => {
+                              // Отслеживание цели
+                              trackGoal('CONTACT_CLICK', {
+                                type: info.label,
+                                method: info.action.startsWith('tel') ? 'phone' :
+                                       info.action.startsWith('mailto') ? 'email' : 'whatsapp'
+                              });
+                            }}
                             className={`text-sm md:text-base text-foreground font-medium hover:text-primary transition-colors duration-1000 truncate block ${activeIndex === index ? 'text-accent' : 'group-hover:text-accent'}`}
                             target={info.action.startsWith('http') ? "_blank" : undefined}
                             rel={info.action.startsWith('http') ? "noopener noreferrer" : undefined}
