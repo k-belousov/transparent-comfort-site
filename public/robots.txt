@@ -13,4 +13,7 @@ Allow: /
 User-agent: *
 Allow: /
 
+# Sitemap
+Sitemap: https://прозрачный-комфорт.рф/sitemap.xml
+
 Sitemap: https://прозрачный-комфорт.рф/sitemap.xml

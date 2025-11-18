@@ -44,4 +44,21 @@ const Index = () => {
   );
 };
 
+// Экспортируем компоненты для доступа из консоли (для отладки)
+if (typeof window !== 'undefined') {
+  (window as any).debugComponents = {
+    Header,
+    Hero,
+    About,
+    Products,
+    Benefits,
+    Process,
+    Calculator,
+    Gallery,
+    Reviews,
+    FAQ,
+    Contact
+  };
+}
+
 export default Index;
