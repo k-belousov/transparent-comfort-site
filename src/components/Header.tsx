@@ -46,7 +46,7 @@ export const Header = () => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   // Логирование размера экрана для диагностики
   useEffect(() => {
@@ -91,7 +91,7 @@ export const Header = () => {
     updateScreenSize();
     window.addEventListener('resize', updateScreenSize);
     return () => window.removeEventListener('resize', updateScreenSize);
-  }, [isMenuOpen]);
+  }, []);
 
   // Проверяем, нужен ли скролл для меню
   useEffect(() => {

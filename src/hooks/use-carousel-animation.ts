@@ -55,7 +55,7 @@ export const useCarouselAnimation = (
     
     // Показываем индикатор кликабельности для центрального элемента
     showClickabilityIndicator();
-  }, [api, showClickabilityIndicator, current]);
+  }, [api, showClickabilityIndicator]);
 
   // Запускаем автопереключение
   const startAutoSwitch = useCallback(() => {
@@ -99,16 +99,38 @@ export const useCarouselAnimation = (
     if (!api) return;
     
     // Останавливаем автопереключение
-    stopAutoSwitch();
+    setAutoSwitching(false);
+    
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    
+    if (indicatorTimeoutRef.current) {
+      clearTimeout(indicatorTimeoutRef.current);
+      indicatorTimeoutRef.current = null;
+    }
+    
+    if (autoSwitchTimeoutRef.current) {
+      clearTimeout(autoSwitchTimeoutRef.current);
+      autoSwitchTimeoutRef.current = null;
+    }
+    
+    setShowIndicator(false);
     
     // Переключаем на выбранный слайд
     api.scrollTo(index);
     
     // Перезапускаем автопереключение через задержку
     autoSwitchTimeoutRef.current = setTimeout(() => {
-      startAutoSwitch();
+      setAutoSwitching(true);
+      intervalRef.current = setInterval(() => {
+        if (api) {
+          api.scrollNext();
+        }
+      }, interval);
     }, interval);
-  }, [api, stopAutoSwitch, startAutoSwitch, interval]);
+  }, [api, interval]);
 
   // Инициализация при изменении API
   useEffect(() => {
@@ -128,14 +150,14 @@ export const useCarouselAnimation = (
       api.off("select", handleSlideChange);
       stopAutoSwitch();
     };
-  }, [api]); // Убираем зависимости, которые могут вызывать бесконечные перерисовки
+  }, [api, handleSlideChange]);
 
   // Очистка при размонтировании компонента
   useEffect(() => {
     return () => {
       stopAutoSwitch();
     };
-  }, [stopAutoSwitch]);
+  }, []);
 
   return {
     current,

@@ -327,9 +327,10 @@ export const Gallery = () => {
     indicatorDelay: 500
   });
 
-  // Логирование изменений текущего слайда
-  useEffect(() => {
-  }, [current, showIndicator]);
+  // Логирование изменений текущего слайда (закомментировано для отладки)
+  // useEffect(() => {
+  //   console.log('Current slide:', current, 'Show indicator:', showIndicator);
+  // }, [current, showIndicator]);
 
   const handleDotClick = (index: number) => {
     // Предотвращаем многократные вызовы при быстром клике

@@ -94,27 +94,30 @@ export const useSequentialAnimation = <T extends HTMLElement = HTMLDivElement>(
 
     const order = getAnimationOrder();
     let currentIndex = 0;
+    let cycleCount = 0;
+    const maxCycles = 5; // Ограничиваем количество циклов
 
-    const animateNext = () => {
-      if (isPaused || !isVisible) {
+    const animateStep = () => {
+      if (isPaused || !isVisible || cycleCount >= maxCycles) {
         return;
       }
       
       animateElement(order[currentIndex]);
       currentIndex = (currentIndex + 1) % order.length;
 
-      // Если завершили полный цикл, планируем следующий
+      // Если завершили полный цикл, увеличиваем счетчик циклов
       if (currentIndex === 0) {
-        cycleTimeoutRef.current = setTimeout(() => {
-          startSequentialAnimation();
-        }, cycleInterval);
-      } else {
-        // Продолжаем анимацию следующего элемента
-        intervalRef.current = setTimeout(animateNext, interval);
+        cycleCount++;
       }
+
+      // Планируем следующий шаг
+      const timeout = currentIndex === 0 ? cycleInterval : interval;
+      const timeoutRef = currentIndex === 0 ? cycleTimeoutRef : intervalRef;
+      
+      timeoutRef.current = setTimeout(animateStep, timeout);
     };
 
-    animateNext();
+    animateStep();
   }, [isPaused, isVisible, getAnimationOrder, animateElement, interval, cycleInterval]);
 
   // Очищаем таймеры с улучшенной обработкой
@@ -161,7 +164,7 @@ export const useSequentialAnimation = <T extends HTMLElement = HTMLDivElement>(
         startSequentialAnimation();
       }, 100); // Небольшая задержка перед перезапуском
     }
-  }, [mobileClickToRestart, startSequentialAnimation]);
+  }, [mobileClickToRestart, startSequentialAnimation, clearTimers]);
 
   // Инициализация при появлении элемента в зоне видимости
   const startAnimation = useCallback(() => {

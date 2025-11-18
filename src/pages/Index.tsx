@@ -44,9 +44,16 @@ const Index = () => {
   );
 };
 
+// Определяем тип для глобального объекта window с дополнительным свойством debugComponents
+declare global {
+  interface Window {
+    debugComponents?: Record<string, unknown>;
+  }
+}
+
 // Экспортируем компоненты для доступа из консоли (для отладки)
 if (typeof window !== 'undefined') {
-  (window as any).debugComponents = {
+  (window as Window).debugComponents = {
     Header,
     Hero,
     About,

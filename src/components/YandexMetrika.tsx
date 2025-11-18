@@ -1,29 +1,29 @@
-import { useEffect } from 'react';
-
 // Типизация для глобального объекта ym
 declare global {
   interface Window {
-    ym: (id: number, method: string, ...params: any[]) => void;
+    ym: (id: number, method: string, ...params: unknown[]) => void;
   }
 }
 
-export const trackGoal = (goalName: string, params?: Record<string, any>) => {
+const trackGoal = (goalName: string, params?: Record<string, unknown>) => {
   if (typeof window !== 'undefined' && window.ym) {
     window.ym(105384967, 'reachGoal', goalName, params);
   }
 };
 
-export const trackUserParams = (params: Record<string, any>) => {
+const trackUserParams = (params: Record<string, unknown>) => {
   if (typeof window !== 'undefined' && window.ym) {
     window.ym(105384967, 'userParams', params);
   }
 };
 
-export const trackPageView = (url?: string) => {
+const trackPageView = (url?: string) => {
   if (typeof window !== 'undefined' && window.ym) {
     window.ym(105384967, 'hit', url || window.location.href);
   }
 };
+
+import { useEffect } from 'react';
 
 export const YandexMetrika = () => {
   useEffect(() => {
@@ -38,5 +38,7 @@ export const YandexMetrika = () => {
 
   return null;
 };
+
+export { trackGoal, trackUserParams, trackPageView };
 
 export default YandexMetrika;
