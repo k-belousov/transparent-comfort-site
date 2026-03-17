@@ -61,6 +61,38 @@ const products = [
   },
 ];
 
+// Создаем Service schema для каждой услуги
+const generateServiceSchema = () => {
+  return products.map((product) => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": product.title,
+    "description": product.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "Прозрачный комфорт",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Челябинск",
+        "addressCountry": "Россия"
+      }
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Челябинск"
+    },
+    "price": product.price,
+    "priceCurrency": "RUB",
+    "serviceOutput": "Мягкие окна из ПВХ-пленки",
+    "features": product.features,
+    "offers": {
+      "@type": "Offer",
+      "price": product.price,
+      "priceCurrency": "RUB"
+    }
+  }));
+};
+
 const ProductCard = ({ product, index, showIndicator, currentSlide }: { product: typeof products[0], index: number, showIndicator: boolean, currentSlide: number }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -99,8 +131,12 @@ const ProductCard = ({ product, index, showIndicator, currentSlide }: { product:
           <div className="relative h-64 overflow-hidden">
             <img
               src={product.image}
-              alt={product.title}
+              alt={`Мягкие окна ${product.title.toLowerCase()} - пример работы компании Прозрачный комфорт в Челябинске`}
               className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 brightness-110' : 'scale-100'}`}
+              loading="lazy"
+              decoding="async"
+              width={800}
+              height={600}
             />
             {/* Улучшенный градиент с анимацией */}
             <div className={`absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent transition-all duration-500 ${isHovered ? 'opacity-80' : 'opacity-60'}`} />
@@ -163,8 +199,12 @@ const ProductCard = ({ product, index, showIndicator, currentSlide }: { product:
             <div className="relative group">
               <img
                 src={product.image}
-                alt={product.title}
+                alt={`Детализация: ${product.title} от компании Прозрачный комфорт, Челябинск`}
                 className="w-full h-48 md:h-64 object-cover rounded-lg transition-all duration-300 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={600}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-accent/20 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
@@ -244,7 +284,7 @@ export const Products = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-card/30">
+    <section className="py-20 bg-gradient-to-b from-background to-card/30" aria-labelledby="products-title">
       <div className="container mx-auto px-4">
         <div
           ref={headerRef}
@@ -253,12 +293,12 @@ export const Products = () => {
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 relative">
+          <h2 id="products-title" className="text-4xl md:text-5xl font-bold mb-4 relative">
             <span className="relative z-10">Наши решения</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
           <p className={`text-xl text-muted-foreground font-sans max-w-2xl mx-auto transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            Профессиональные мягкие окна для любых типов помещений
+            Комплексные решения для защиты и комфорта
           </p>
         </div>
         
@@ -320,6 +360,14 @@ export const Products = () => {
           </div>
         </div>
       </div>
+      
+      {/* Service Schema для SEO/GEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateServiceSchema())
+        }}
+      />
     </section>
   );
 };

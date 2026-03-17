@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Globe, Clock, Hammer, Sparkles, Shield, CheckCircle } from "lucide-react";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
+import { trackGoal } from "@/components/YandexMetrika";
 
 const benefits = [
   {
@@ -70,7 +71,7 @@ export const Benefits = () => {
   }, [contentVisible, startAnimation, stopAnimation]);
 
   return (
-    <section className="py-20 bg-gradient-to-b from-card via-card/50 to-background relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-card via-card/50 to-background relative overflow-hidden" aria-labelledby="benefits-title">
       {/* Декоративный фон */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 w-32 h-32 bg-accent rounded-full blur-3xl animate-float" />
@@ -94,6 +95,7 @@ export const Benefits = () => {
             Качество и надёжность в каждой детали
           </p>
         </div>
+        
         
         <div
           ref={contentRef}
@@ -154,6 +156,13 @@ export const Benefits = () => {
               </Card>
             );
           })}
+        </div>
+        
+        {/* GEO-текст */}
+        <div className={`mt-8 text-center transition-all duration-700 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '700ms' }}>
+          <p className="text-muted-foreground font-sans">
+            Работаем в Челябинске и области
+          </p>
         </div>
         
         {/* Дополнительный декоративный элемент */}

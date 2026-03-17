@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Phone, Ruler, Factory, Wrench, Award } from "lucide-react";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
+import { trackGoal } from "@/components/YandexMetrika";
 
 const steps = [
   {
@@ -15,13 +16,13 @@ const steps = [
     icon: Ruler,
     number: "02",
     title: "Замер",
-    description: "Наш специалист приедет, проведёт замеры и рассчитает точную стоимость",
+    description: "Наш специалист приедет в Челябинск или ближайшие города, проведёт замеры и рассчитает точную стоимость",
   },
   {
     icon: Factory,
     number: "03",
     title: "Производство",
-    description: "Изготавливаем окна по вашим размерам из качественных материалов",
+    description: "Изготавливаем окна по вашим размерам из качественных материалов в Челябинске",
   },
   {
     icon: Wrench,
@@ -70,7 +71,7 @@ export const Process = () => {
   }, [contentVisible, startAnimation, stopAnimation]);
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background via-card/30 to-card relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-background via-card/30 to-card relative overflow-hidden" aria-labelledby="process-title">
       {/* Улучшенный фон с анимацией */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0 bg-[linear-gradient(45deg,hsl(var(--accent))_25%,transparent_25%,transparent_75%,hsl(var(--accent))_75%)] bg-[length:20px_20px] animate-gradient-shift" />
@@ -91,7 +92,7 @@ export const Process = () => {
           {/* Декоративный элемент заголовка */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
           
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 relative">
+          <h2 id="process-title" className="text-4xl md:text-5xl font-bold mb-4 relative">
             <span className="relative z-10">Как всё происходит</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
@@ -99,6 +100,7 @@ export const Process = () => {
             Простой и прозрачный процесс от заявки до установки
           </p>
         </div>
+        
         
         <div
           ref={contentRef}

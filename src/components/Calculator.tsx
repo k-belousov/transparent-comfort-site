@@ -8,34 +8,8 @@ import { Calculator as CalcIcon, Phone, Mail, MessageCircle } from "lucide-react
 import { toast } from "sonner";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { trackGoal } from "@/components/YandexMetrika";
-
-const typePrices = {
-  home: 1200,
-  cafe: 1500,
-  gazebo: 1200,
-  covers: 500,
-  custom: 3000,
-};
-
-const materialPrices = {
-  pvc: 1.0,
-  premium: 1.3,
-  japanese: 1.5,
-};
-
-const typeNames = {
-  home: "Для частного дома",
-  cafe: "Для кафе и ресторанов",
-  gazebo: "Для беседок и террас",
-  covers: "Защитные ПВХ пленки",
-  custom: "Чехлы и тенты на заказ",
-};
-
-const materialNames = {
-  pvc: "ПВХ стандарт",
- premium: "ПВХ премиум",
-  japanese: "Материал высокого качества",
-};
+import CONTACT from "@/config/contact";
+import { TYPE_PRICES, MATERIAL_PRICES, TYPE_NAMES, MATERIAL_NAMES } from "@/config/prices";
 
 export const Calculator = () => {
   const [formData, setFormData] = useState({
@@ -86,8 +60,8 @@ export const Calculator = () => {
     // Имитация расчета для визуального эффекта
     setTimeout(() => {
       const area = width * height;
-      const basePrice = typePrices[formData.type as keyof typeof typePrices] || 8000;
-      const materialMultiplier = materialPrices[formData.material as keyof typeof materialPrices] || 1.0;
+      const basePrice = TYPE_PRICES[formData.type as keyof typeof TYPE_PRICES] || 8000;
+      const materialMultiplier = MATERIAL_PRICES[formData.material as keyof typeof MATERIAL_PRICES] || 1.0;
       const price = Math.round(area * basePrice * materialMultiplier);
       
       setCalculatedPrice(price);
@@ -98,33 +72,34 @@ export const Calculator = () => {
       // Отслеживание цели
       trackGoal('CALCULATOR_SUCCESS', {
         price: price,
-        type: typeNames[formData.type as keyof typeof typeNames],
-        material: materialNames[formData.material as keyof typeof materialNames],
+        type: TYPE_NAMES[formData.type as keyof typeof TYPE_NAMES],
+        material: MATERIAL_NAMES[formData.material as keyof typeof MATERIAL_NAMES],
         area: `${formData.width}x${formData.height}`
       });
     }, 1500);
   };
 
   const handleContact = (method: 'phone' | 'whatsapp' | 'email') => {
-    const materialName = materialNames[formData.material as keyof typeof materialNames] || "Не указан";
-    const message = `Здравствуйте! Я рассчитал(а) стоимость мягких окон для ${typeNames[formData.type as keyof typeof typeNames]} площадью ${formData.width}м × ${formData.height}м. Материал: ${materialName}. Примерная стоимость: ${calculatedPrice?.toLocaleString()} руб. Хотел(а) бы получить точный расчет.`;
+    const materialName = MATERIAL_NAMES[formData.material as keyof typeof MATERIAL_NAMES] || "Не указан";
+    const typeName = TYPE_NAMES[formData.type as keyof typeof TYPE_NAMES] || "Не указан";
+    const message = `Здравствуйте! Я рассчитал(а) стоимость мягких окон для ${typeName} площадью ${formData.width}м × ${formData.height}м. Материал: ${materialName}. Примерная стоимость: ${calculatedPrice?.toLocaleString()} руб. Хотел(а) бы получить точный расчет.`;
     
     // Отслеживание цели
     trackGoal('CALCULATOR_CONTACT', {
       method: method,
       price: calculatedPrice,
-      type: typeNames[formData.type as keyof typeof typeNames]
+      type: typeName
     });
     
     switch (method) {
       case 'phone':
-        window.open('tel:+7XXXXXXXXXX');
+        window.open(`tel:${CONTACT.phoneDigits}`);
         break;
       case 'whatsapp':
-        window.open(`https://wa.me/7XXXXXXXXXX?text=${encodeURIComponent(message)}`);
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(message)}`);
         break;
       case 'email':
-        window.open(`mailto:example@email.com?subject=Запрос на расчет мягких окон&body=${encodeURIComponent(message)}`);
+        window.open(`mailto:${CONTACT.email}?subject=Запрос на расчет мягких окон&body=${encodeURIComponent(message)}`);
         break;
     }
   };
@@ -147,7 +122,7 @@ export const Calculator = () => {
     
     // Отслеживание цели
     trackGoal('CALCULATOR_FORM_SUBMIT', {
-      type: typeNames[formData.type as keyof typeof typeNames],
+      type: TYPE_NAMES[formData.type as keyof typeof TYPE_NAMES],
       area: `${formData.width}x${formData.height}`
     });
     
@@ -163,7 +138,7 @@ export const Calculator = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-card via-card/50 to-background relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-card via-card/50 to-background relative overflow-hidden" aria-labelledby="calculator-title">
       {/* Декоративные элементы фона */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl animate-float" />
@@ -180,14 +155,15 @@ export const Calculator = () => {
             {/* Декоративный элемент заголовка */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
             
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 relative">
+            <h3 id="calculator-title" className="text-4xl md:text-5xl font-bold mb-4 relative">
               <span className="relative z-10">Калькулятор стоимости</span>
               <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
-            </h2>
+            </h3>
             <p className={`text-xl text-muted-foreground font-sans transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               Рассчитайте предварительную стоимость за 1 минуту
             </p>
           </div>
+          
           
           <Card
             ref={contentRef}
@@ -309,7 +285,6 @@ export const Calculator = () => {
                     <SelectContent className="border-accent/20 max-w-[calc(100vw-2rem)]">
                       <SelectItem value="pvc">ПВХ стандарт - долговечный и практичный</SelectItem>
                       <SelectItem value="premium">ПВХ премиум - повышенная прочность</SelectItem>
-                      <SelectItem value="japanese">Материал высокого качества - максимальная прозрачность</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -405,10 +380,10 @@ export const Calculator = () => {
                 )}
                 
                 
-                <p className="text-xs text-muted-foreground text-center font-sans">
-                  Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
-                </p>
-              </form>
+               <p className="text-xs text-muted-foreground text-center font-sans">
+                 Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
+               </p>
+             </form>
             </CardContent>
           </Card>
         </div>

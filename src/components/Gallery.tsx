@@ -154,8 +154,12 @@ const GalleryCard = ({ item, index, showIndicator, currentSlide }: { item: typeo
           <div className="relative h-64 overflow-hidden">
             <img
               src={item.image}
-              alt={item.title}
+              alt={`${item.title} - проект компании Прозрачный комфорт в Челябинске. ${item.description}`}
               className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 brightness-110' : 'scale-100'}`}
+              loading="lazy"
+              decoding="async"
+              width={800}
+              height={600}
             />
             {/* Улучшенный градиент с анимацией */}
             <div className={`absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent transition-all duration-500 ${isHovered ? 'opacity-80' : 'opacity-60'}`} />
@@ -237,8 +241,12 @@ const GalleryCard = ({ item, index, showIndicator, currentSlide }: { item: typeo
             <div className="relative group">
               <img
                 src={item.image}
-                alt={item.title}
+                alt={`Детализация проекта "${item.title}" - компания Прозрачный комфорт, ${item.location}`}
                 className="w-full h-48 md:h-80 object-cover rounded-lg transition-all duration-300 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={600}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-accent/20 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
@@ -357,6 +365,7 @@ export const Gallery = () => {
             Реализованные проекты для частных и коммерческих клиентов
           </p>
         </div>
+        
         
         <div
           ref={contentRef}

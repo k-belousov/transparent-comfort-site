@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useCarouselAnimation } from "@/hooks/use-carousel-animation";
 import { trackGoal } from "@/components/YandexMetrika";
+import CONTACT from "@/config/contact";
 
 const reviews = [
   {
@@ -336,7 +337,10 @@ const ReviewCard = ({ review, index, showIndicator }: { review: typeof reviews[0
         <div className="grid md:grid-cols-2 gap-4 md:gap-6">
           <div className="space-y-4 md:space-y-6">
             <div className="flex items-center gap-4 animate-slide-in-left">
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center text-accent font-bold text-lg md:text-2xl shadow-lg">
+              <div
+                className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center text-accent font-bold text-lg md:text-2xl shadow-lg"
+                aria-hidden="true"
+              >
                 {review.avatar}
               </div>
               <div>
@@ -440,13 +444,13 @@ const ConsultationDialog = () => {
     
     switch (method) {
       case 'phone':
-        window.open('tel:+7XXXXXXXXXX');
+        window.open(`tel:${CONTACT.phoneDigits}`);
         break;
       case 'whatsapp':
-        window.open(`https://wa.me/73510000000?text=${encodeURIComponent(message)}`);
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(message)}`);
         break;
       case 'email':
-        window.open(`mailto:example@email.com?subject=Запрос на консультацию&body=${encodeURIComponent(message)}`);
+        window.open(`mailto:${CONTACT.email}?subject=Запрос на консультацию&body=${encodeURIComponent(message)}`);
         break;
     }
   };
@@ -538,10 +542,8 @@ export const Reviews = () => {
             <span className="relative z-10">Отзывы клиентов</span>
             <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent blur-xl -z-10" />
           </h2>
-          <p className={`text-xl text-muted-foreground font-sans max-w-2xl mx-auto transition-all duration-700 delay-300 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            Более 3000 довольных клиентов доверяют нам уже 9 лет
-          </p>
         </div>
+        
         
         <div
           ref={contentRef}

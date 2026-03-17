@@ -1,8 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
 All colors MUST be HSL.
 */
 
@@ -109,7 +109,7 @@ All colors MUST be HSL.
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   html {
@@ -117,11 +117,47 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  
+    
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+    font-family: var(--font-serif);
+  }
+
+  /* Учет предпочтений пользователя по анимациям */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .animate-float,
+    .animate-pulse-glow,
+    .animate-shimmer,
+    .animate-bounce-soft,
+    .animate-gradient-shift,
+    .animate-accordion-down,
+    .animate-accordion-up,
+    .animate-fade-in,
+    .animate-fade-in-up,
+    .animate-scale-in,
+    .animate-slide-in-left,
+    .animate-slide-in-right,
+    .animate-zoom-in {
+      animation: none !important;
+    }
   }
   
   /* Premium utility classes */
@@ -156,11 +192,25 @@ All colors MUST be HSL.
   }
   
   .premium-card {
-    @apply border-border/50 transition-all duration-300 hover:premium-shadow hover:scale-[1.02];
+    border: 1px solid hsl(var(--border) / 0.5);
+    transition: all 0.3s ease;
+  }
+  
+  .premium-card:hover {
+    box-shadow: var(--shadow-premium);
+    transform: scale(1.02);
   }
   
   .premium-button {
-    @apply transition-all duration-300 hover:scale-105 active:scale-95;
+    transition: all 0.3s ease;
+  }
+  
+  .premium-button:hover {
+    transform: scale(1.05);
+  }
+  
+  .premium-button:active {
+    transform: scale(0.95);
   }
   
   .text-gradient {

@@ -7,36 +7,37 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
 import { useEffect } from "react";
 import { trackGoal } from "@/components/YandexMetrika";
+import CONTACT from "@/config/contact";
 
 const contactInfo = [
   {
     icon: Phone,
     label: "Телефон",
-    value: "+7 (351) 000-00-00",
-    action: "tel:+73510000000",
+    value: CONTACT.phone,
+    action: `tel:${CONTACT.phoneDigits}`,
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
     value: "Написать в WhatsApp",
-    action: "https://wa.me/7XXXXXXXXXX",
+    action: `https://wa.me/${CONTACT.whatsapp}`,
   },
   {
     icon: Mail,
     label: "Email",
-    value: "example@email.com",
-    action: "mailto:example@email.com",
+    value: CONTACT.email,
+    action: `mailto:${CONTACT.email}`,
   },
   {
     icon: MapPin,
     label: "Адрес",
-    value: "г. Челябинск, ул. Примерная, д. 1",
+    value: CONTACT.address,
     action: null,
   },
   {
     icon: Clock,
     label: "График работы",
-    value: "Пн-Вс: 9:00 — 20:00",
+    value: CONTACT.schedule,
     action: null,
   },
 ];
@@ -81,7 +82,8 @@ export const Contact = () => {
   };
 
   return (
-    <footer className="py-10 md:py-12 bg-gradient-to-b from-card via-secondary/10 to-secondary/20 relative overflow-hidden" role="contentinfo">
+    <footer className="py-10 md:py-12 bg-gradient-to-b from-card via-secondary/10 to-secondary/20 relative overflow-hidden" role="contentinfo" aria-labelledby="contact-title">
+      <h2 id="contact-title" className="sr-only">Контакты компании Прозрачный комфорт</h2>
       {/* Декоративные элементы фона */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-10 left-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl animate-float" />
@@ -99,7 +101,16 @@ export const Contact = () => {
             <div className="absolute top-0 left-0 w-0 h-0 border-r-[40px] border-r-transparent border-t-[40px] border-t-accent/10" />
             
             <div className="relative inline-block mb-4 md:mb-6">
-              <img src={logo} alt="Прозрачный комфорт" className="h-12 md:h-16 w-auto relative z-10" />
+              <img
+                src={logo}
+                alt="Прозрачный комфорт - логотип компании по установке мягких окон"
+                className="h-12 md:h-16 w-auto relative z-10"
+                loading="eager"
+                decoding="async"
+                width={200}
+                height={80}
+                fetchPriority="high"
+              />
               {/* Свечение вокруг логотипа */}
               <div className="absolute inset-0 bg-accent/20 blur-xl scale-150 animate-pulse-glow" />
             </div>
@@ -113,7 +124,7 @@ export const Contact = () => {
             </p>
             <Button
               onClick={() => {
-                window.open("tel:+7XXXXXXXXXX");
+                window.open(`tel:${CONTACT.phoneDigits}`);
                 trackGoal('CONTACT_FOOTER_PHONE_CLICK');
               }}
               size="lg"
@@ -213,6 +224,9 @@ export const Contact = () => {
             <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
             <span>Мы не просто ставим окна — мы создаём комфорт, который видно.</span>
             <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+          </p>
+          <p className="mt-2 text-xs">
+            Работаем в Челябинске и области
           </p>
         </div>
       </div>

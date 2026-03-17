@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, ChevronUp, ChevronDown } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import { trackGoal } from "@/components/YandexMetrika";
+import CONTACT from "@/config/contact";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -151,7 +152,7 @@ export const Header = () => {
     { name: "Калькулятор", href: "calculator" },
     { name: "Галерея", href: "gallery" },
     { name: "Отзывы", href: "reviews" },
-    { name: "FAQ", href: "faq" },
+    { name: "ЧаВо", href: "faq" },
   ];
 
   const scrollToTop = () => {
@@ -163,6 +164,22 @@ export const Header = () => {
 
   return (
     <>
+      {/* Skip Links для доступности */}
+      <div className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[1000]">
+        <a
+          href="#main-content"
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-md mr-2 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          Перейти к основному содержанию
+        </a>
+        <a
+          href="#contact-title"
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          Перейти к контактам
+        </a>
+      </div>
+      
       <header
         className={`fixed top-0 left-0 right-0 z-50 bg-background border-b border-border/50 transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "-translate-y-full"
@@ -173,11 +190,20 @@ export const Header = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <img src={logo} alt="Прозрачный комфорт - мягкие окна премиум-класса" className="h-8 w-auto sm:h-10" />
+              <img
+                src={logo}
+                alt="Прозрачный комфорт - логотип компании по установке мягких окон премиум-класса"
+                className="h-8 w-auto sm:h-10"
+                loading="eager"
+                decoding="async"
+                width={160}
+                height={40}
+                fetchPriority="high"
+              />
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:hidden lg:flex items-center space-x-4 xl:space-x-8" role="navigation" aria-label="Основная навигация">
+            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8" role="navigation" aria-label="Основная навигация">
               {navigation.map((item) => (
                 <button
                   key={item.name}
@@ -205,7 +231,7 @@ export const Header = () => {
                 size="icon"
                 className="hover:bg-accent/20 transition-all duration-300 h-9 w-9 xl:h-10 xl:w-10"
                 onClick={() => {
-                  window.open("tel:+73510000000");
+                  window.open(`tel:${CONTACT.phoneDigits}`);
                   trackGoal('HEADER_PHONE_CLICK');
                 }}
               >
@@ -342,7 +368,7 @@ export const Header = () => {
                       variant="outline"
                       className="w-full hover:bg-accent/20 transition-all duration-300 text-lg py-4"
                       onClick={() => {
-                        window.open("tel:+73510000000");
+                        window.open(`tel:${CONTACT.phoneDigits}`);
                         trackGoal('MOBILE_MENU_PHONE_CLICK');
                       }}
                     >

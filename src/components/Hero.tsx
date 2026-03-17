@@ -60,7 +60,12 @@ export const Hero = () => {
       <div className="absolute inset-0">
         <div
           className="absolute inset-0 bg-cover bg-center scale-105 animate-pulse-glow"
-          style={{ backgroundImage: `url(${heroImage})` }}
+          style={{
+            backgroundImage: `url(${heroImage})`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover'
+          }}
+          aria-hidden="true"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40" />
         {/* Дополнительный градиент для премиального эффекта */}
@@ -86,7 +91,15 @@ export const Hero = () => {
       <div className="container relative z-10 mx-auto px-4 py-16 md:py-24">
         <div className={`mb-8 md:mb-12 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
           <div className="relative inline-block">
-            <img src={logo} alt="Прозрачный комфорт" className="h-16 md:h-24 w-auto relative z-10" />
+            <img
+              src={logo}
+              alt="Логотип компании Прозрачный комфорт - мягкие окна премиум-класса для террас, кафе и загородных домов"
+              className="h-16 md:h-24 w-auto relative z-10"
+              loading="eager"
+              decoding="async"
+              width={200}
+              height={80}
+            />
             {/* Свечение вокруг логотипа */}
             <div className="absolute inset-0 bg-accent/20 blur-xl scale-150 animate-pulse-glow" />
           </div>
