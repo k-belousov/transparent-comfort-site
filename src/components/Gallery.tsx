@@ -101,7 +101,7 @@ const galleryItems = [
     description: "Уютная беседка для семейных вечеров на даче",
     image: galleryImage6,
     tags: ["Беседка", "15м²", "1 день"],
-    price: "19 500 ₽",
+    price: "18 000 ₽",
     duration: "1 день",
     location: "Челябинск, п. Первомайский",
     details: {

@@ -12,9 +12,9 @@ import { trackGoal } from "@/components/YandexMetrika";
 const typePrices = {
   home: 1200,
   cafe: 1500,
-  gazebo: 1300,
-  covers: 1500,
-  custom: 2000,
+  gazebo: 1200,
+  covers: 500,
+  custom: 3000,
 };
 
 const materialPrices = {

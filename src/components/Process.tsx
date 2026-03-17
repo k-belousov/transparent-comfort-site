@@ -9,7 +9,7 @@ const steps = [
     icon: Phone,
     number: "01",
     title: "Заявка",
-    description: "Свяжитесь с нами удобным способом — позвоните или оставьте заявку на сайте",
+    description: "Свяжитесь с нами удобным способом — позвоните или напишите в мессенджерах",
   },
   {
     icon: Ruler,
@@ -21,7 +21,7 @@ const steps = [
     icon: Factory,
     number: "03",
     title: "Производство",
-    description: "Изготавливаем окна по вашим размерам из высококачественных материалов",
+    description: "Изготавливаем окна по вашим размерам из качественных материалов",
   },
   {
     icon: Wrench,
@@ -141,22 +141,24 @@ export const Process = () => {
                   ))}
                 </div>
                 
-                <CardContent className="p-3 md:p-6 text-center relative">
+                <CardContent className="p-3 md:p-6 text-center relative h-full flex flex-col">
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className={`text-6xl md:text-8xl font-bold text-accent/20 transition-all duration-1000 group-hover:text-accent/30 ${isEven ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'} ${isActive ? 'text-accent/30' + (isEven ? ' rotate-6' : ' -rotate-6') : ''}`}>
                       {step.number}
                     </div>
                   </div>
-                  <div className="relative z-10">
+                  <div className="relative z-10 flex flex-col flex-grow justify-between">
                     <div className={`p-1.5 md:p-3 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 w-fit mx-auto mb-2 md:mb-4 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-1000 relative ${isEven ? 'group-hover:rotate-12' : 'group-hover:-rotate-12'} ${isActive ? 'from-accent/40 to-primary/40' + (isEven ? ' rotate-12' : ' -rotate-12') : ''}`}>
                       <Icon className={`w-4 h-4 md:w-6 md:h-6 text-primary relative z-10 transition-all duration-1000 ${isActive ? 'text-accent scale-110' : ''}`} />
                       {/* Свечение вокруг иконки */}
                       <div className={`absolute inset-0 bg-accent/20 rounded-full blur-md transition-opacity duration-1000 ${isActive ? 'opacity-100 animate-pulse' : 'opacity-0 group-hover:opacity-100'}`} />
                     </div>
-                    <h3 className={`text-base md:text-xl font-bold mb-1 md:mb-3 transition-colors duration-1000 ${isActive ? 'text-accent' : 'group-hover:text-accent'}`}>{step.title}</h3>
-                    <p className="text-xs md:text-sm text-muted-foreground font-sans line-clamp-2 leading-relaxed">
-                      {step.description}
-                    </p>
+                    <div className="flex-grow flex flex-col justify-center">
+                      <h3 className={`text-base md:text-xl font-bold mb-1 md:mb-3 transition-colors duration-1000 ${isActive ? 'text-accent' : 'group-hover:text-accent'}`}>{step.title}</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground font-sans leading-relaxed flex-grow">
+                        {step.description}
+                      </p>
+                    </div>
                   </div>
                   
                   {/* Декоративная линия внизу */}
@@ -171,7 +173,7 @@ export const Process = () => {
         <div className={`mt-16 text-center transition-all duration-700 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '1000ms' }}>
           <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-accent/10 to-primary/10 rounded-full border border-accent/20 hover:border-accent/40 transition-all duration-300 hover:scale-105">
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-            <span className="text-sm text-muted-foreground font-medium">Весь процесс занимает от 3 до 7 дней</span>
+            <span className="text-sm text-muted-foreground font-medium">Весь процесс занимает от 2 до 10 дней</span>
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
           </div>
         </div>

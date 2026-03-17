@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Shield, ChevronDown, Calendar, Building2, Award, MapPin, Sparkles } from "lucide-react";
-import heroImage from "@/assets/figma-hero-image.png";
+import heroImage from "@/assets/hero-image.webp";
 import logo from "@/assets/logo.svg";
 import { useState, useEffect } from "react";
 import { useSequentialAnimation } from "@/hooks/use-sequential-animation";

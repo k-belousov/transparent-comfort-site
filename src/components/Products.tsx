@@ -5,12 +5,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useCarouselAnimation } from "@/hooks/use-carousel-animation";
-import privateHomeImage from "@/assets/figma-private-home.png";
-import cafeImage from "@/assets/figma-cafe.png";
-import gazeboImage from "@/assets/figma-gazebo.png";
-import coversImage1 from "@/assets/figma-covers-1.png";
-import coversImage2 from "@/assets/figma-covers-2.png";
-import coversImage3 from "@/assets/figma-covers-3.png";
+import privateHomeImage from "@/assets/private-home.webp";
+import cafeImage from "@/assets/cafe.webp";
+import gazeboImage from "@/assets/gazebo.webp";
+import coversImage1 from "@/assets/awning-covers.webp";
+import coversImage3 from "@/assets/protective-film.webp";
 import { trackGoal } from "@/components/YandexMetrika";
 
 const products = [
@@ -19,34 +18,34 @@ const products = [
     description: "Защита террас и веранд с сохранением естественного освещения",
     image: privateHomeImage,
     price: "от 1 200 ₽/м²",
-    features: ["Защита от ветра и осадков", "Сохранение тепла до 40%", "Срок службы до 15 лет"],
-    installationTime: "1-2 дня"
+    features: ["Защита от ветра и осадков", "Морозостойкость", "Срок службы до 10 лет"],
+    installationTime: "2-10 дней"
   },
   {
     title: "Для кафе и ресторанов",
     description: "Расширение сезонных площадок для бизнеса",
     image: cafeImage,
     price: "от 1 500 ₽/м²",
-    features: ["Увеличение посадочных мест", "Работа при -15°C", "Быстровозводимая конструкция"],
-    installationTime: "2-3 дня"
+    features: ["Увеличение посадочных мест", "Защита от ветра", "Быстровозводимая конструкция"],
+    installationTime: "2-10 дней"
   },
   {
     title: "Для беседок и террас",
     description: "Создание комфортного пространства для отдыха",
     image: gazeboImage,
-    price: "от 1 300 ₽/м²",
+    price: "от 1 200 ₽/м²",
     features: ["Полная прозрачность", "Защита от насекомых", "Легкий уход"],
-    installationTime: "1 день"
+    installationTime: "2-10 дней"
   },
   {
     title: "Защитные ПВХ пленки",
     description: "Защитные ПВХ пленки для различных поверхностей",
     image: coversImage3,
-    price: "от 1 500 ₽/м²",
-    features: ["Простая установка", "Легкая очистка", "Долговечность до 10 лет"],
-    installationTime: "3-5 дней",
+    price: "от 500 ₽/м²",
+    features: ["Высокая прочность и устойчивость к механическим воздействиям", "Легкая очистка", "Долговечность до 10 лет"],
+    installationTime: "1-2 дня",
     applications: [
-      { area: "Использование на кухне", description: "Защита кухонных фасадов и столов от брызг и жира" },
+      { area: "Использование на кухне", description: "Защита кухонных поверхностей" },
       { area: "Столовая", description: "Сохранение чистоты обеденных зон" },
       { area: "Детские комнаты", description: "Защита стен и мебели от рисунков и повреждений" },
       { area: "Зоны присутствия животных", description: "Защита поверхностей от когтей и зубов" }
@@ -56,9 +55,9 @@ const products = [
     title: "Чехлы и тенты на заказ",
     description: "Индивидуальные чехлы и тенты для автомобилей, включая кузова газелей",
     image: coversImage1,
-    price: "от 2 000 ₽/м²",
+    price: "от 3 000 ₽/м²",
     features: ["Влагостойкость", "УФ защита", "Износостойкость", "Легкий уход"],
-    installationTime: "1-2 дня"
+    installationTime: "2-5 дней"
   },
 ];
 

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import craftsmanImage from "@/assets/figma-craftsman.png";
+import craftsmanImage from "@/assets/craftsman.jpg";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useSequentialAnimation } from "@/hooks/use-sequential-animation";
 
